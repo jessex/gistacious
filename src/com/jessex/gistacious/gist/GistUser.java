@@ -19,7 +19,6 @@ public class GistUser {
 		this.gravatarUrl = gravatarUrl;
 	}
 	
-	
 	/**
 	 * Sets the avatar URL for this user.
 	 * @param avatarUrl the avatarUrl to set
