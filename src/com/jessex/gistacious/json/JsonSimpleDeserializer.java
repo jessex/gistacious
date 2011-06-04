@@ -13,11 +13,26 @@ import com.jessex.gistacious.gist.*;
 
 public class JsonSimpleDeserializer implements JsonDeserializer {
 	
-	private JSONParser parser = new JSONParser();
+	private JSONParser parser = new JSONParser(); //Parser for all JSON text
 	
+	/**
+	 * Parses and deserializes a Gist object from the provided JSON text. This
+	 * Gist object does not contain all comments on said Gist, as obtaining a 
+	 * given Gist's comments requires a completely separate Github API call.
+	 * @param json -
+	 * 			JSON text to parse
+	 * @return gist -
+	 * 			Gist object with related attributes and objects
+	 * @throws ParseException (org.json.simple.parser.ParseException)
+	 */
 	@Override
-	public Object deserializeGistFromJson(String json) throws ParseException {
-		JSONObject gistJO = (JSONObject) parser.parse(json); //Gist JSON object
+	public Object deserializeGistFromJson(String json) {
+		JSONObject gistJO = null; //Gist JSON object
+		try {
+			gistJO = (JSONObject) parser.parse(json); 
+		} catch (ParseException pe) {
+			return null;
+		}
 		Gist gist = new Gist(); //Primary gist object
 		
 		//Parse base attributes of gist from JSON
@@ -34,13 +49,8 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 		
 		//Parse gist that this gist was forked from, if any
 		String forkString = (String) gistJO.get("fork_of");
-		if (forkString != null) {
-			try {
+		if (forkString != null) 
 				gist.setForkOf((Gist) deserializeGistFromJson(forkString));
-			} catch (ParseException pe) {
-				gist.setForkOf(null);
-			}
-		}
 		else gist.setForkOf(null);
 		
 		//Parse user for this gist
@@ -53,7 +63,7 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 		
 		//Parse list of commit histories for gist
 		try {
-			gist.setHistory(deserializeGistHistoryFromJson((String) 
+			gist.setHistory(deserializeGistHistoriesFromJson((String) 
 					gistJO.get("history")));
 		} catch (ParseException pe) {
 			gist.setHistory(null);
@@ -77,14 +87,16 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 		
 		return gist;
 	}
-
-	@Override
-	public Object deserializeCommentFromJson(String json) 
-	throws ParseException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
+	/**
+	 * Parses and deserializes a GistChangeStatus object corresponding to a 
+	 * GistHistory for some Gist from the provided JSON text.
+	 * @param csJson -
+	 * 			JSON text to parse
+	 * @return gistChangeStatus -
+	 * 			GistChangeStatus corresponding to some Gist's GistHistory
+	 * @throws ParseException (org.json.simple.parser.ParseException)
+	 */
 	private GistChangeStatus deserializeGistChangeStatusFromJson(String csJson) 
 	throws ParseException {
 		JSONObject csJO = (JSONObject) parser.parse(csJson);
@@ -92,6 +104,14 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 				csJO.get("deletions"), (Integer) csJO.get("total"));
 	}
 	
+	/**
+	 * Parses and deserializes a GistUser object from the provided JSON text.
+	 * @param userJson -
+	 * 			JSON text to parse
+	 * @return gistUser -
+	 * 			GistUser corresponding to some Gist
+	 * @throws ParseException (org.json.simple.parser.ParseException)
+	 */
 	private GistUser deserializeGistUserFromJson(String userJson) 
 	throws ParseException {
 		JSONObject userJO = (JSONObject) parser.parse(userJson);
@@ -104,11 +124,20 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 				(String) userJO.get("gravatar_url"));
 	}
 	
+	/**
+	 * Parses and deserializes a list of GistFile objects from the provided 
+	 * JSON text.
+	 * @param fileJson -
+	 * 			JSON text to parse
+	 * @return gistFiles -
+	 * 			list of GistFile objects corresponding to some Gist
+	 * @throws ParseException (org.json.simple.parser.ParseException)
+	 */
 	private List<GistFile> deserializeGistFilesFromJson(String fileJson) 
 	throws ParseException {
 		JSONObject obj = (JSONObject) parser.parse(fileJson);
 		Collection files = obj.values(); //Isolate file value from filename key
-		List<GistFile> gf = new ArrayList<GistFile>();
+		List<GistFile> gistFiles = new ArrayList<GistFile>();
 		
 		for (Object file : files) {
 			JSONObject f = (JSONObject) file;
@@ -116,16 +145,25 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 			String filename = (String) f.get("filename");
 			String rawUrl = (String) f.get("raw_url");
 			long size = (Long) f.get("size");
-			gf.add(new GistFile(filename, content, rawUrl, size));
+			gistFiles.add(new GistFile(filename, content, rawUrl, size));
 		}
 		
-		return gf;
+		return gistFiles;
 	}
 	
-	private List<GistHistory> deserializeGistHistoryFromJson(String historyJson) 
-	throws ParseException {
+	/**
+	 * Parses and deserializes a list of GistHistory objects from the provided 
+	 * JSON text.
+	 * @param historyJson -
+	 * 			JSON text to parse
+	 * @return gistHistories -
+	 * 			list of GistHistory objects corresponding to some Gist
+	 * @throws ParseException (org.json.simple.parser.ParseException)
+	 */
+	private List<GistHistory> deserializeGistHistoriesFromJson(String 
+			historyJson) throws ParseException {
 		JSONArray histArray = (JSONArray) parser.parse(historyJson);
-		List<GistHistory> gh = new ArrayList<GistHistory>();
+		List<GistHistory> gistHistories = new ArrayList<GistHistory>();
 		
 		for (Object history : histArray) {
 			JSONObject h = (JSONObject) history;
@@ -135,16 +173,26 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 			GistChangeStatus gcs = deserializeGistChangeStatusFromJson((String) 
 					h.get("change_status"));
 			GistUser user = deserializeGistUserFromJson((String) h.get("user"));
-			gh.add(new GistHistory(url, version, committedAt, user, gcs));
+			gistHistories.add(new GistHistory(url, version, committedAt, 
+					user, gcs));
 		}
 		
-		return gh;
+		return gistHistories;
 	}
 	
+	/**
+	 * Parses and deserializes a list of Gist objects from the provided JSON 
+	 * text. 
+	 * @param forkJson -
+	 * 			JSON text to parse
+	 * @return gistForks -
+	 * 			list of GistFile objects forked from some other Gist
+	 * @throws ParseException (org.json.simple.parser.ParseException)
+	 */
 	private List<Gist> deserializeGistForksFromJson(String forkJson) 
 	throws ParseException {
 		JSONArray forkArray = (JSONArray) parser.parse(forkJson);
-		List<Gist> gf = new ArrayList<Gist>();
+		List<Gist> gistForks = new ArrayList<Gist>();
 		
 		for (Object fork : forkArray) {
 			JSONObject f = (JSONObject) fork;
@@ -152,12 +200,41 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 			String url = (String) f.get("url");
 			String createdAt = (String) f.get("created_at");
 			GistUser user = deserializeGistUserFromJson((String) f.get("user"));
-			gf.add(new Gist(id, url, createdAt, user));
+			gistForks.add(new Gist(id, url, createdAt, user));
 		}
 		
-		return gf;
+		return gistForks;
 	}
 	
+	/**
+	 * Parses and deserializes a GistComment object from the provided JSON text.
+	 * @param json -
+	 * 			JSON text to parse
+	 * @return gistComment -
+	 * 			GistComment corresponding to some Gist
+	 * @throws ParseException (org.json.simple.parser.ParseException)
+	 */
+	@Override
+	public Object deserializeCommentFromJson(String json) {
+		JSONObject commentJO = null;
+		try {
+			commentJO = (JSONObject) parser.parse(json);
+		} catch (ParseException e) {
+			return null;
+		}
+		
+		String id = (String) commentJO.get("id");
+		String url = (String) commentJO.get("url");
+		String body = (String) commentJO.get("body");
+		String createdAt = (String) commentJO.get("created_at");
+		GistUser user = null;
+		try {
+			user = deserializeGistUserFromJson((String) 
+					commentJO.get("user"));
+		} catch (ParseException e) { }
+		
+		return new GistComment(id, url, body, createdAt, user);
+	}
 
 
 }
