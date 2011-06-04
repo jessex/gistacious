@@ -14,6 +14,7 @@ import com.jessex.gistacious.gist.*;
 public class JsonSimpleDeserializer implements JsonDeserializer {
 	
 	private JSONParser parser = new JSONParser(); //Parser for all JSON text
+	private JsonCache cache = new JsonCache(); //Cache for JSON objects
 	
 	/**
 	 * Parses and deserializes a Gist object from the provided JSON text. This
@@ -118,10 +119,15 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 		String user = (String) userJO.get("login");
 		
 		//Check if user in cache, if not parse entire thing, if so return it
+		GistUser gistUser = cache.getUser(user);
+		if (gistUser == null) { //User not yet in cache, so build and add it
+			gistUser = new GistUser(user, (Long) userJO.get("id"), (String) 
+					userJO.get("url"), (String) userJO.get("avatar_url"), 
+					(String) userJO.get("gravatar_url"));
+			cache.addUser(gistUser);
+		}
 		
-		return new GistUser(user, (Long) userJO.get("id"), (String) 
-				userJO.get("url"), (String) userJO.get("avatar_url"), 
-				(String) userJO.get("gravatar_url"));
+		return gistUser;
 	}
 	
 	/**
