@@ -2,7 +2,7 @@ package com.jessex.gistacious.gist;
 
 public class GistComment {
 
-	private String id;
+	private long id;
 	private String url;
 	private String body;
 	private String createdAt;
@@ -12,7 +12,7 @@ public class GistComment {
 	
 	public GistComment() { }
 	
-	public GistComment(String id, String url, String body, String createdAt, 
+	public GistComment(long id, String url, String body, String createdAt, 
 			GistUser user) {
 		this.id = id;
 		this.url = url;
@@ -25,7 +25,7 @@ public class GistComment {
 	 * Sets the id of this comment.
 	 * @param id the id to set
 	 */
-	public void setId(String id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	
@@ -33,7 +33,7 @@ public class GistComment {
 	 * Returns the id of this comment.
 	 * @return the id
 	 */
-	public String getId() {
+	public long getId() {
 		return id;
 	}
 	
