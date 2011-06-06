@@ -6,7 +6,7 @@ public class Gist {
 
 	private List<GistFile> files;
 	private List<Gist> forks;
-	private List<GistHistory> history;
+	private List<GistHistory> histories;
 	private Gist forkOf;
 	private GistUser user;
 	
@@ -51,16 +51,16 @@ public class Gist {
 	 * Sets the commit history for this gist.
 	 * @param history the history to set
 	 */
-	public void setHistory(List<GistHistory> history) {
-		this.history = history;
+	public void setHistories(List<GistHistory> histories) {
+		this.histories = histories;
 	}
 
 	/**
 	 * Returns the commit history for this gist.
 	 * @return the history
 	 */
-	public List<GistHistory> getHistory() {
-		return history;
+	public List<GistHistory> getHistories() {
+		return histories;
 	}
 
 	/**
