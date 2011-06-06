@@ -25,7 +25,6 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 	 * 			JSON text to parse
 	 * @return gist -
 	 * 			Gist object with related attributes and objects
-	 * @throws ParseException (org.json.simple.parser.ParseException)
 	 */
 	@Override
 	public Object deserializeGistFromJson(String json) {
@@ -36,18 +35,26 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 			return null;
 		}
 		Gist gist = new Gist(); //Primary gist object
+		Object temp = null; //Temporary object for testing primitives for null
 		
 		//Parse base attributes of gist from JSON
-		gist.setId((Long) gistJO.get("id"));
 		gist.setDescription((String) gistJO.get("description"));
-		gist.setCommentCount((Integer) gistJO.get("comments"));
-		gist.setPublic((Boolean) gistJO.get("public"));
 		gist.setCreatedAt((String) gistJO.get("created_at"));
 		gist.setUpdatedAt((String) gistJO.get("updated_at"));
 		gist.setUrl((String) gistJO.get("url"));
 		gist.setHtmlUrl((String) gistJO.get("html_url"));
 		gist.setGitPushUrl((String) gistJO.get("git_push_url"));
 		gist.setGitPullUrl((String) gistJO.get("git_pull_url"));
+		//Watch for nulls with primitive types
+		temp = gistJO.get("comments");
+		if (temp != null) gist.setCommentCount((Integer) temp);
+		else gist.setCommentCount(0);
+		temp = gistJO.get("public");
+		if (temp != null) gist.setPublic((Boolean) temp);
+		else gist.setPublic(false);
+		temp = gistJO.get("id");
+		if (temp != null) gist.setId((Long) temp);
+		else gist.setId(0L);
 		
 		//Parse gist that this gist was forked from, if any
 		String forkString = (String) gistJO.get("fork_of");
@@ -65,10 +72,10 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 		
 		//Parse list of commit histories for gist
 		try {
-			gist.setHistory(deserializeGistHistoriesFromJson((String) 
+			gist.setHistories(deserializeGistHistoriesFromJson((String) 
 					gistJO.get("history")));
 		} catch (ParseException pe) {
-			gist.setHistory(null);
+			gist.setHistories(null);
 		}
 		
 		//Parse list of files in this gist
@@ -91,22 +98,6 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 	}
 	
 	/**
-	 * Parses and deserializes a GistChangeStatus object corresponding to a 
-	 * GistHistory for some Gist from the provided JSON text.
-	 * @param csJson -
-	 * 			JSON text to parse
-	 * @return gistChangeStatus -
-	 * 			GistChangeStatus corresponding to some Gist's GistHistory
-	 * @throws ParseException (org.json.simple.parser.ParseException)
-	 */
-	private GistChangeStatus deserializeGistChangeStatusFromJson(String csJson) 
-	throws ParseException {
-		JSONObject csJO = (JSONObject) parser.parse(csJson);
-		return new GistChangeStatus((Integer) csJO.get("additions"),(Integer)
-				csJO.get("deletions"), (Integer) csJO.get("total"));
-	}
-	
-	/**
 	 * Parses and deserializes a GistUser object from the provided JSON text.
 	 * @param userJson -
 	 * 			JSON text to parse
@@ -122,9 +113,13 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 		//Check if user in cache, if not parse entire thing, if so return it
 		GistUser gistUser = userCache.getValue(user);
 		if (gistUser == null) { //User not yet in cache, so build and add it
-			gistUser = new GistUser(user, (Long) userJO.get("id"), (String) 
-					userJO.get("url"), (String) userJO.get("avatar_url"), 
-					(String) userJO.get("gravatar_url"));
+			long id = 0L;
+			Object temp = userJO.get("id");
+			if (temp != null) id = (Long) temp;
+			
+			gistUser = new GistUser(user, id, (String) userJO.get("url"), 
+					(String) userJO.get("avatar_url"), (String) 
+					userJO.get("gravatar_url"));
 			userCache.putValue(user, gistUser);
 		}
 		
@@ -145,13 +140,16 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 		JSONObject obj = (JSONObject) parser.parse(fileJson);
 		Collection files = obj.values(); //Isolate file value from filename key
 		List<GistFile> gistFiles = new ArrayList<GistFile>();
+		Object temp = null;
 		
 		for (Object file : files) {
 			JSONObject f = (JSONObject) file;
 			String content = (String) f.get("content");
 			String filename = (String) f.get("filename");
 			String rawUrl = (String) f.get("raw_url");
-			long size = (Long) f.get("size");
+			long size = 0L;
+			temp = f.get("size");
+			if (temp != null) size = (Long) temp;
 			gistFiles.add(new GistFile(filename, content, rawUrl, size));
 		}
 		
@@ -188,6 +186,31 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 	}
 	
 	/**
+	 * Parses and deserializes a GistChangeStatus object corresponding to a 
+	 * GistHistory for some Gist from the provided JSON text.
+	 * @param csJson -
+	 * 			JSON text to parse
+	 * @return gistChangeStatus -
+	 * 			GistChangeStatus corresponding to some Gist's GistHistory
+	 * @throws ParseException (org.json.simple.parser.ParseException)
+	 */
+	private GistChangeStatus deserializeGistChangeStatusFromJson(String csJson) 
+	throws ParseException {
+		JSONObject csJO = (JSONObject) parser.parse(csJson);
+		int additions, deletions, total;
+		additions = deletions = total = 0;
+		
+		Object temp = csJO.get("additions");
+		if (temp != null) additions = (Integer) temp;
+		temp = csJO.get("deletions");
+		if (temp != null) deletions = (Integer) temp;
+		temp = csJO.get("total");
+		if (temp != null) total = (Integer) temp;
+			
+		return new GistChangeStatus(additions, deletions, total);
+	}
+	
+	/**
 	 * Parses and deserializes a list of Gist objects from the provided JSON 
 	 * text. 
 	 * @param forkJson -
@@ -200,13 +223,16 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 	throws ParseException {
 		JSONArray forkArray = (JSONArray) parser.parse(forkJson);
 		List<Gist> gistForks = new ArrayList<Gist>();
+		Object temp = null;
 		
 		for (Object fork : forkArray) {
 			JSONObject f = (JSONObject) fork;
-			long id = (Long) f.get("id");
 			String url = (String) f.get("url");
 			String createdAt = (String) f.get("created_at");
 			GistUser user = deserializeGistUserFromJson((String) f.get("user"));
+			long id = 0L;
+			temp = f.get("id");
+			if (temp != null) id = (Long) temp;
 			gistForks.add(new Gist(id, url, createdAt, user));
 		}
 		
@@ -219,7 +245,6 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 	 * 			JSON text to parse
 	 * @return gistComment -
 	 * 			GistComment corresponding to some Gist
-	 * @throws ParseException (org.json.simple.parser.ParseException)
 	 */
 	@Override
 	public Object deserializeCommentFromJson(String json) {
@@ -230,10 +255,13 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 			return null;
 		}
 		
-		String id = (String) commentJO.get("id");
 		String url = (String) commentJO.get("url");
 		String body = (String) commentJO.get("body");
 		String createdAt = (String) commentJO.get("created_at");
+		long id = 0L;
+		Object temp = commentJO.get("id");
+		if (temp != null) id = (Long) temp;
+		
 		GistUser user = null;
 		try {
 			user = deserializeGistUserFromJson((String) 
@@ -241,6 +269,78 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 		} catch (ParseException e) { }
 		
 		return new GistComment(id, url, body, createdAt, user);
+	}
+
+	/**
+	 * Parses and deserializes an expanded GistUser object from the provided 
+	 * JSON text. This user contains all fields contained in the "user" objects 
+	 * found in standard Gist JSON responses, in addition to more fields found 
+	 * in User JSON responses. If certain fields are present, namely 
+	 * "private_gists" and "total_private_repos", then this must be the 
+	 * currently authenticated user.
+	 * @param json -
+	 * 			JSON text to parse
+	 * @return gistUser -
+	 * 			GistUser corresponding to some Github user
+	 */
+	@Override
+	public Object deserializeUserFromJson(String json) {
+		JSONObject userJO = null;
+		try {
+			userJO = (JSONObject) parser.parse(json);
+		} catch (ParseException e) {
+			return null;
+		}
+		
+		GistUser user = new GistUser();
+		Object temp = null;
+		
+		user.setLogin((String) userJO.get("login"));
+		user.setUrl((String) userJO.get("url"));
+		user.setCreatedAt((String) userJO.get("created_at"));
+		user.setAvatarUrl((String) userJO.get("avatar_url"));
+		user.setGravatarUrl((String) userJO.get("gravatar_url"));
+		user.setHtmlUrl((String) userJO.get("html_url"));
+		user.setName((String) userJO.get("name"));
+		user.setType((String) userJO.get("type"));
+		user.setCompany((String) userJO.get("company"));
+		user.setLocation((String) userJO.get("location"));
+		user.setBlog((String) userJO.get("blog"));
+		user.setEmail((String) userJO.get("email"));
+		user.setBio((String) userJO.get("bio"));
+		
+		temp = userJO.get("id");
+		if (temp != null) user.setId((Long) temp);
+		else user.setId(0L);
+		temp = userJO.get("hireable");
+		if (temp != null) user.setHireable((Boolean) temp);
+		else user.setHireable(false);
+		temp = userJO.get("followers");
+		if (temp != null) user.setFollowerCount((Integer) temp);
+		else user.setFollowerCount(0);
+		temp = userJO.get("following");
+		if (temp != null) user.setFollowingCount((Integer) temp);
+		else user.setFollowingCount(0);
+		temp = userJO.get("public_repos");
+		if (temp != null) user.setPublicRepoCount((Integer) temp);
+		else user.setPublicRepoCount(0);
+		temp = userJO.get("public_gists");
+		if (temp != null) user.setPublicGistCount((Integer) temp);
+		else user.setPublicGistCount(0);
+		temp = userJO.get("private_gists");
+		if (temp != null) user.setPrivateGistCount((Integer) temp);
+		else user.setPrivateGistCount(0);
+		temp = userJO.get("total_private_repos");
+		if (temp != null) {
+			user.setPrivateRepoCount((Integer) temp);
+			user.setIsMe(true); //Got private info, must be authenticated user
+		}
+		else {
+			user.setPrivateRepoCount(0);
+			user.setIsMe(false); //No private info, must not be authenticated 
+		}
+		
+		return user;
 	}
 
 
