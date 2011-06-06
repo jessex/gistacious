@@ -6,4 +6,6 @@ public interface JsonDeserializer {
 	
 	Object deserializeCommentFromJson(String json);
 	
+	Object deserializeUserFromJson(String json);
+	
 }
