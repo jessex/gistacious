@@ -45,9 +45,9 @@ public class URLBuilder {
 	 * Returns a specifically crafted URL to be used in calls to the Github API.
 	 * Takes in the specific type of URL to be created and the value to be 
 	 * inserted into the URL. For example, to retrieve the URL for finding the 
-	 * Gist with id 11111, one would call getURL(URLTYPE.GIST, "11111").
+	 * Gist with id 11111, one would call getURL(UrlType.GIST, "11111").
 	 * @param type -
-	 * 			type of URL (URLTYPE) being requested
+	 * 			type of URL (UrlType) being requested
 	 * @param value -
 	 * 			some value that needs to be placed in the URL
 	 * @return url -
@@ -64,9 +64,9 @@ public class URLBuilder {
 	 * Returns a specifically crafted URL to be used in calls to the Github API.
 	 * Takes in the specific type of URL to be created. For example, to retrieve
 	 * the URL for finding all of the authenticated user's gists, one would call 
-	 * getURL(URLTYPE.MY_GISTS).
+	 * getURL(UrlType.MY_GISTS).
 	 * @param type -
-	 * 			type of URL (URLTYPE) being requested
+	 * 			type of URL (UrlType) being requested
 	 * @return url -
 	 * 			String representation of constructed URL
 	 */
