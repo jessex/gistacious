@@ -15,7 +15,7 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 	
 	private JSONParser parser = new JSONParser(); //Parser for all JSON text
 	//Cache for GistUser objects taken from JSON text
-	private JsonCache<String, GistUser> userCache = new JsonUserCache(); 
+	private JsonCache<String, GistUser> userCache = new JsonUserCache();
 	
 	/**
 	 * Parses and deserializes a Gist object from the provided JSON text. This
@@ -125,7 +125,7 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 			gistUser = new GistUser(user, (Long) userJO.get("id"), (String) 
 					userJO.get("url"), (String) userJO.get("avatar_url"), 
 					(String) userJO.get("gravatar_url"));
-			userCache.addValue(user, gistUser);
+			userCache.putValue(user, gistUser);
 		}
 		
 		return gistUser;

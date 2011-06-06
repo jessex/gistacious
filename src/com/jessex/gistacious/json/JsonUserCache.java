@@ -1,12 +1,13 @@
 package com.jessex.gistacious.json;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import com.jessex.gistacious.gist.GistUser;
 
 public class JsonUserCache implements JsonCache<String, GistUser>{
 
-	private HashMap<String, GistUser> userCache;
+	private Map<String, GistUser> userCache;
 	
 	public JsonUserCache() {
 		this.userCache = new HashMap<String, GistUser>();
@@ -40,7 +41,7 @@ public class JsonUserCache implements JsonCache<String, GistUser>{
 	 * @param user -
 	 * 			GistUser to add to cache
 	 */
-	public void addValue(String login, GistUser user) {
+	public void putValue(String login, GistUser user) {
 		userCache.put(user.getLogin(), user);
 	}
 	

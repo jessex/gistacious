@@ -8,6 +8,6 @@ public interface JsonCache<K,V> {
 	
 	V getValue(K key);
 	
-	void addValue(K key, V value);
+	void putValue(K key, V value);
 	
 }
