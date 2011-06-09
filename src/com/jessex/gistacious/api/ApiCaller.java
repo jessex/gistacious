@@ -2,8 +2,6 @@ package com.jessex.gistacious.api;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -18,8 +16,8 @@ public class ApiCaller {
 	
 	/**
 	 * Sends a GET request to the given URL and returns the response from the 
-	 * server. Throws an IOException if the URL is malformed or if there is any 
-	 * issue with establishing the connection to the URL.
+	 * server. Throws an IOException if there is any issue with establishing the
+	 * connection to the URL.
 	 * @param url -
 	 * 			the URL to send the GET request to
 	 * @return response -
@@ -27,20 +25,14 @@ public class ApiCaller {
 	 * @throws IOException
 	 */
 	public static HttpResponse sendGetRequest(String url) throws IOException {
-		HttpGet get = new HttpGet();
-		try {
-			get.setURI(new URI(url));
-		} catch (URISyntaxException e) {
-			throw new IOException();
-		}
+		HttpGet get = new HttpGet(url);
 		return client.execute(get);
 	}
 	
 	/**
 	 * Sends a POST request to the given URL with a body specified by the given
 	 * JSON text and returns the response from the server. Throws an IOException 
-	 * if the URL is malformed or if there is any issue with establishing the 
-	 * connection to the URL.
+	 * if there is any issue with establishing the connection to the URL.
 	 * @param url -
 	 * 			the URL to send the POST request to
 	 * @param json -
@@ -51,12 +43,7 @@ public class ApiCaller {
 	 */
 	public static HttpResponse sendPostRequest(String url, String json) 
 	throws IOException {
-		HttpPost post = new HttpPost();
-		try {
-			post.setURI(new URI(url));
-		} catch (URISyntaxException e) {
-			throw new IOException();
-		}
+		HttpPost post = new HttpPost(url);
 		post.setHeader("Content-type", "application/json");
 		StringEntity jsonEntity = null;
 		try {
