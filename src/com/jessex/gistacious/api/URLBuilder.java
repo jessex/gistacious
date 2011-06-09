@@ -3,7 +3,7 @@ package com.jessex.gistacious.api;
 import java.util.HashMap;
 import java.util.Map;
 
-public class URLBuilder {
+public class UrlBuilder {
 
 	private static final String URLBASE = "https://api.github.com";
 	private static final String TOKEN = ":replace";
@@ -24,6 +24,7 @@ public class URLBuilder {
 	}
 	
 	//Extensions to be placed on to the ends of the API's base URL
+	@SuppressWarnings("serial")
 	private static final Map<UrlType, String> URLEXTENSIONS = new 
 	HashMap<UrlType, String>() {
 		{
