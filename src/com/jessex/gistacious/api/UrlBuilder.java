@@ -8,7 +8,7 @@ public class UrlBuilder {
 	private static final String URLBASE = "https://api.github.com";
 	private static final String TOKEN = ":replace";
 	
-	//Types of URLs to be constructed
+	/** Types (categorized by purpose) of URLs to be constructed. **/
 	public static enum UrlType {
 		GIST,
 		GIST_STAR,
@@ -23,7 +23,7 @@ public class UrlBuilder {
 		USER_ME
 	}
 	
-	//Extensions to be placed on to the ends of the API's base URL
+	/** Extensions to be placed on to the ends of the API's base URL. **/
 	@SuppressWarnings("serial")
 	private static final Map<UrlType, String> URLEXTENSIONS = new 
 	HashMap<UrlType, String>() {
@@ -77,6 +77,53 @@ public class UrlBuilder {
 			return null;
 		else 
 			return URLBASE + extension;
+	}
+	
+	/**
+	 * Appends a single name-value parameter pair to the given URL and returns.
+	 * The parameter must be passed in as a length-2 String array, with the name
+	 * occupying index 0 and the value occupying index 1.
+	 * @param url -
+	 * 			base URL to append parameter to
+	 * @param parameter -
+	 * 			parameter passed in as name-value pair
+	 * @return newUrl -
+	 * 			String representation of parameter-augmented URL
+	 */
+	public static String appendParameter(String url, String[] parameter) {
+		if (parameter.length != 2) return url;
+		
+		StringBuilder sb = new StringBuilder(url);
+		sb.append("?" + parameter[0]);
+		sb.append("=" + parameter[1]);
+		return sb.toString();
+	}
+	
+	/**
+	 * Appends an array of name-value parameter pairs to the given URL and 
+	 * returns. The parameters must be passed in as a String array where each
+	 * entry is of length 2, with the name occupying index [i][0] and the value
+	 * occupying index [i][1] for each entry at index i. 
+	 * @param url -
+	 * 			base URL to append parameter to
+	 * @param parameters -
+	 * 			parameters passed in as array of name-value pairs
+	 * @return newUrl -
+	 * 			String representation of parameter-augmented URL
+	 */
+	public static String appendParameters(String url, String[][] parameters) {
+		if (parameters.length < 1) return url;
+		else if (parameters[0].length != 2) return url;
+		
+		StringBuilder sb = new StringBuilder(url);
+		sb.append("?" + parameters[0][0]);
+		sb.append("=" + parameters[0][1]);
+		int length = parameters.length;
+		for (int i=1; i<length; i++) {
+			sb.append("&" + parameters[i][0]);
+			sb.append("=" + parameters[i][1]);
+		}
+		return sb.toString();
 	}
 	
 }
