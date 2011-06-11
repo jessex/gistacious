@@ -1,10 +1,10 @@
 package com.jessex.gistacious.api;
 
 import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.auth.BasicScheme;
-import org.apache.http.message.AbstractHttpMessage;
 
-public class SimpleAuthenticator {
+public class SimpleAuthenticator implements HttpAuthenticator {
 
 	private String user;
 	private String password;
@@ -17,12 +17,12 @@ public class SimpleAuthenticator {
 	/**
 	 * Attaches authentication information to a given HTTP method by adding a 
 	 * basic username-password credential to the header of the request. Accepts 
-	 * any HTTP method which is a subclass of AbstractHttpMessage, which notably
+	 * any HTTP method which is a subclass of HttpRequestBase, which notably
 	 * includes HttpGet, HttpPost, HttpPut and HttpDelete.
 	 * @param request -
 	 * 			HTTP request to authenticate
 	 */
-	public void authenticateRequest(AbstractHttpMessage request) {
+	public void authenticateRequest(HttpRequestBase request) {
 		request.addHeader(BasicScheme.authenticate
 				(new UsernamePasswordCredentials(this.user, this.password), 
 						"UTF-8", false));
