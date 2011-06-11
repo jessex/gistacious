@@ -5,8 +5,12 @@ import java.io.UnsupportedEncodingException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
@@ -15,45 +19,101 @@ public class HttpRequester {
 	private static HttpClient client = new DefaultHttpClient();
 	
 	/**
-	 * Sends a GET request to the given URL and returns the response from the 
-	 * server. Throws an IOException if there is any issue with establishing the
-	 * connection to the URL.
+	 * Executes a given HTTP request and returns the response from the server.
+	 * @param request -
+	 * 			HTTP request to make to server
+	 * @return response -
+	 * 			server response to HTTP request
+	 */
+	public static HttpResponse executeRequest(HttpRequestBase request) {
+		try {
+			return client.execute(request);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	/**
+	 * Returns a GET request for the given URL.
 	 * @param url -
 	 * 			the URL to send the GET request to
-	 * @return response -
-	 * 			response (org.apache.http.HttpResponse) from the GET request
-	 * @throws IOException
+	 * @return request -
+	 * 			HTTP GET request
 	 */
-	public static HttpResponse sendGetRequest(String url) throws IOException {
-		HttpGet get = new HttpGet(url);
-		return client.execute(get);
+	public static HttpGet buildGetRequest(String url) {
+		return new HttpGet(url);
 	}
 	
 	/**
-	 * Sends a POST request to the given URL with a body specified by the given
-	 * JSON text and returns the response from the server. Throws an IOException 
-	 * if there is any issue with establishing the connection to the URL.
+	 * Returns a DELETE request for the given URl and with the given 
+	 * authentication credentials.
+	 * @param url -
+	 * 			the URL to send the DELETE request to
+	 * @param auth -
+	 * 			authentication credentials
+	 * @return request -
+	 * 			HTTP DELETE request
+	 */
+	public static HttpDelete buildDeleteRequest(String url, 
+			HttpAuthenticator auth) {
+		HttpDelete request = new HttpDelete(url);
+		auth.authenticateRequest(request);
+		return request;
+	}
+	
+	/**
+	 * Returns a POST request for the given URL with a body specified by the 
+	 * given JSON text and with the given authentication credentials.
 	 * @param url -
 	 * 			the URL to send the POST request to
 	 * @param json -
 	 * 			the JSON text to package as the body of the request
-	 * @return response -
-	 * 			response (org.apache.http.HttpResponse) from the POST request
-	 * @throws IOException
+	 * @return request -
+	 * 			HTTP POST request
 	 */
-	public static HttpResponse sendPostRequest(String url, String json) 
-	throws IOException {
-		HttpPost post = new HttpPost(url);
-		post.setHeader("Content-type", "application/json");
-		StringEntity jsonEntity = null;
+	public static HttpPost buildPostRequest(String url, String json, 
+			HttpAuthenticator auth) {
+		HttpPost request = new HttpPost(url);
+		augmentRequest(request, json, auth);
+		return request;
+	}
+	
+	/**
+	 * Returns a PUT request for the given URL with a body specified by the 
+	 * given JSON text and with the given authentication credentials.
+	 * @param url
+	 * @param json
+	 * @param auth
+	 * @return
+	 */
+	public static HttpPut buildPutRequest(String url, String json, 
+			HttpAuthenticator auth) {
+		HttpPut request = new HttpPut(url);
+		augmentRequest(request, json, auth);
+		return request;
+	}
+	
+	/**
+	 * Augments an HTTP request (of the POST or PUT method) by setting the body 
+	 * content type as JSON, adding the JSON text to the body and adding the
+	 * authentication credentials to the request header.
+	 * @param request -
+	 * 			HTTP request to augment
+	 * @param json -
+	 * 			the JSON text to package as the body of the request
+	 * @param auth -
+	 * 			authentication credentials
+	 */
+	private static void augmentRequest(HttpEntityEnclosingRequestBase request, 
+			String json, HttpAuthenticator auth) {
+		request.setHeader("Content-type", "application/json");
 		try {
-			jsonEntity = new StringEntity(json, "UTF-8");
+			request.setEntity(new StringEntity(json, "UTF-8"));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		post.setEntity(jsonEntity);
-		
-		return client.execute(post);
+		auth.authenticateRequest(request);
 	}
+	
 	
 }
