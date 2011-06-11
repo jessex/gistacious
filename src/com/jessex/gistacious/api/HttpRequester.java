@@ -20,6 +20,8 @@ public class HttpRequester {
 	
 	/**
 	 * Executes a given HTTP request and returns the response from the server.
+	 * Returns null if there is an IOException, signifying an issue with the
+	 * server connection.
 	 * @param request -
 	 * 			HTTP request to make to server
 	 * @return response -
@@ -45,7 +47,7 @@ public class HttpRequester {
 	}
 	
 	/**
-	 * Returns a DELETE request for the given URl and with the given 
+	 * Returns a DELETE request for the given URL and with the given 
 	 * authentication credentials.
 	 * @param url -
 	 * 			the URL to send the DELETE request to
@@ -68,6 +70,8 @@ public class HttpRequester {
 	 * 			the URL to send the POST request to
 	 * @param json -
 	 * 			the JSON text to package as the body of the request
+	 * @param auth -
+	 * 			authentication credentials
 	 * @return request -
 	 * 			HTTP POST request
 	 */
@@ -81,10 +85,14 @@ public class HttpRequester {
 	/**
 	 * Returns a PUT request for the given URL with a body specified by the 
 	 * given JSON text and with the given authentication credentials.
-	 * @param url
-	 * @param json
-	 * @param auth
-	 * @return
+	 * @param url -
+	 * 			the URL to send the PUT request to
+	 * @param json -
+	 * 			the JSON text to package as the body of the request
+	 * @param auth -
+	 * 			authentication credentials
+	 * @return request -
+	 * 			HTTP PUT request
 	 */
 	public static HttpPut buildPutRequest(String url, String json, 
 			HttpAuthenticator auth) {
@@ -107,12 +115,12 @@ public class HttpRequester {
 	private static void augmentRequest(HttpEntityEnclosingRequestBase request, 
 			String json, HttpAuthenticator auth) {
 		request.setHeader("Content-type", "application/json");
+		auth.authenticateRequest(request);
 		try {
 			request.setEntity(new StringEntity(json, "UTF-8"));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		auth.authenticateRequest(request);
 	}
 	
 	
