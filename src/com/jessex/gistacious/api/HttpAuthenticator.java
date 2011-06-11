@@ -4,6 +4,11 @@ import org.apache.http.client.methods.HttpRequestBase;
 
 public interface HttpAuthenticator {
 
+	/**
+	 * Adds a basic authentication credential header to the given request.
+	 * @param request -
+	 * 			request to append authentication credentials to
+	 */
 	void authenticateRequest(HttpRequestBase request);
 	
 }
