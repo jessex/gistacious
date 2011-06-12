@@ -11,4 +11,12 @@ public interface HttpAuthenticator {
 	 */
 	void authenticateRequest(HttpRequestBase request);
 	
+	String getUser();
+	
+	void setUser(String user);
+	
+	String getPassword();
+	
+	void setPassword(String password);
+	
 }
