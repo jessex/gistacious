@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.util.EntityUtils;
 
 import com.jessex.gistacious.gist.*;
@@ -72,18 +75,30 @@ public class FullGistApi implements GistApi, GistCommentApi, GistUserApi {
 	@Override
 	public GistComment createGistComment(long gistId, GistComment comment) 
 	throws IOException {
-		return null;
+		String url = UrlBuilder.getURL(UrlBuilder.UrlType.GIST_COMMENTS, 
+				Long.toString(gistId));
+		String json = serializer.serializeJsonFromGistComment(comment);
+		String responseJson = executePostCall(url, json);
+		return deserializer.deserializeCommentFromJson(responseJson);
 	}
 
 	@Override
 	public GistComment editGistComment(long commentId, GistComment newComment) 
 	throws IOException {
-		return null;
+		String url = UrlBuilder.getURL(UrlBuilder.UrlType.SINGLE_COMMENT, 
+				Long.toString(commentId));
+		String json = serializer.serializeJsonFromGistComment(newComment);
+		String responseJson = executePostCall(url, json);
+		return deserializer.deserializeCommentFromJson(responseJson);
 	}
 
 	@Override
 	public void deleteGistComment(long id) throws IOException {
-		
+		String url = UrlBuilder.getURL(UrlBuilder.UrlType.SINGLE_COMMENT, 
+				Long.toString(id));
+		HttpDelete delete = HttpRequester.buildDeleteRequest(url, 
+				authenticator);
+		HttpRequester.executeRequest(delete);
 	}
 
 	@Override
@@ -124,22 +139,47 @@ public class FullGistApi implements GistApi, GistCommentApi, GistUserApi {
 
 	@Override
 	public Gist createGist(Gist gist) throws IOException {
-		return null;
+		String url = UrlBuilder.getURL(UrlBuilder.UrlType.MY_GISTS);
+		String json = serializer.serializeJsonFromGist(gist);
+		String responseJson = executePostCall(url, json);
+		return deserializer.deserializeGistFromJson(responseJson);
 	}
 
 	@Override
 	public Gist editGist(long id, Gist newGist) throws IOException {
-		return null;
+		String url = UrlBuilder.getURL(UrlBuilder.UrlType.GIST, 
+				Long.toString(id));
+		String json = serializer.serializeJsonFromGist(newGist);
+		String responseJson = executePostCall(url, json);
+		return deserializer.deserializeGistFromJson(responseJson);
 	}
 
 	@Override
 	public Gist forkGist(long id) throws IOException {
-		return null;
+		String url = UrlBuilder.getURL(UrlBuilder.UrlType.GIST_FORK, 
+				Long.toString(id));
+		HttpPost post = new HttpPost(url);
+		authenticator.authenticateRequest(post);
+		HttpResponse response = HttpRequester.executeRequest(post);
+		if (response == null) throw new IOException();
+		else {
+			if (response.getStatusLine().getStatusCode() != 201) {
+				//Deal with status line issue
+			}
+			
+			String responseJson = EntityUtils.toString(response.getEntity());
+			return deserializer.deserializeGistFromJson(responseJson);
+		}
 	}
 
 	@Override
 	public void deleteGist(long id) throws IOException {
-		
+		String url = UrlBuilder.getURL(UrlBuilder.UrlType.GIST, 
+				Long.toString(id));
+		HttpDelete delete = HttpRequester.buildDeleteRequest(url, 
+				authenticator);
+		HttpResponse response = HttpRequester.executeRequest(delete);
+		if (response == null) throw new IOException();
 	}
 
 	@Override
@@ -155,12 +195,19 @@ public class FullGistApi implements GistApi, GistCommentApi, GistUserApi {
 
 	@Override
 	public void starGist(long id) throws IOException {
-		
+		String url = UrlBuilder.getURL(UrlBuilder.UrlType.GIST_STAR, 
+				Long.toString(id));
+		HttpPut put = HttpRequester.buildPutRequest(url, "", authenticator);
+		HttpRequester.executeRequest(put);
 	}
 
 	@Override
 	public void unstarGist(long id) throws IOException {
-		
+		String url = UrlBuilder.getURL(UrlBuilder.UrlType.GIST_STAR, 
+				Long.toString(id));
+		HttpDelete delete = HttpRequester.buildDeleteRequest(url, 
+				authenticator);
+		HttpRequester.executeRequest(delete);
 	}
 	
 	
@@ -177,10 +224,25 @@ public class FullGistApi implements GistApi, GistCommentApi, GistUserApi {
 				//Deal with status line issue (possible 404)
 			}
 			
-			String json = EntityUtils.toString(response.getEntity());
-			return json;
+			return EntityUtils.toString(response.getEntity());
 		}
 	}
+	
+	private String executePostCall(String url, String json) throws IOException {
+		HttpPost post = HttpRequester.buildPostRequest(url, json, 
+				authenticator);
+		HttpResponse response = HttpRequester.executeRequest(post);
+		if (response == null) throw new IOException();
+		else {
+			int statusCode = response.getStatusLine().getStatusCode();
+			if (statusCode != 200 && statusCode != 201) {
+				//Deal with status line issue
+			}
+			
+			return EntityUtils.toString(response.getEntity());
+		}
+	}
+	
 	
 	
 }
