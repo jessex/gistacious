@@ -27,7 +27,7 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 	 * 			Gist object with related attributes and objects
 	 */
 	@Override
-	public Object deserializeGistFromJson(String json) {
+	public Gist deserializeGistFromJson(String json) {
 		JSONObject gistJO = null; //Gist JSON object
 		try {
 			gistJO = (JSONObject) parser.parse(json); 
@@ -138,7 +138,7 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 	private List<GistFile> deserializeGistFilesFromJson(String fileJson) 
 	throws ParseException {
 		JSONObject obj = (JSONObject) parser.parse(fileJson);
-		Collection files = obj.values(); //Isolate file value from filename key
+		Collection<?> files = obj.values(); //Isolate file value from filename key
 		List<GistFile> gistFiles = new ArrayList<GistFile>();
 		Object temp = null;
 		
@@ -247,7 +247,7 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 	 * 			GistComment corresponding to some Gist
 	 */
 	@Override
-	public Object deserializeCommentFromJson(String json) {
+	public GistComment deserializeCommentFromJson(String json) {
 		JSONObject commentJO = null;
 		try {
 			commentJO = (JSONObject) parser.parse(json);
@@ -284,7 +284,7 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 	 * 			GistUser corresponding to some Github user
 	 */
 	@Override
-	public Object deserializeUserFromJson(String json) {
+	public GistUser deserializeUserFromJson(String json) {
 		JSONObject userJO = null;
 		try {
 			userJO = (JSONObject) parser.parse(json);
@@ -341,6 +341,18 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 		}
 		
 		return user;
+	}
+
+	@Override
+	public List<Gist> deserializeGistsFromJson(String json) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<GistComment> deserializeCommentsFromJson(String json) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 
