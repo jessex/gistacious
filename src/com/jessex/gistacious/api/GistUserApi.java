@@ -1,11 +1,13 @@
 package com.jessex.gistacious.api;
 
+import java.io.IOException;
+
 import com.jessex.gistacious.gist.GistUser;
 
 public interface GistUserApi extends AuthenticationApi {
 
-	GistUser getUser(String user);
+	GistUser getUser(String user) throws IOException;
 	
-	GistUser getMyUser();
+	GistUser getMyUser() throws IOException;
 	
 }
