@@ -22,6 +22,7 @@ public class SimpleAuthenticator implements HttpAuthenticator {
 	 * @param request -
 	 * 			HTTP request to authenticate
 	 */
+	@Override
 	public void authenticateRequest(HttpRequestBase request) {
 		request.addHeader(BasicScheme.authenticate
 				(new UsernamePasswordCredentials(this.user, this.password), 
@@ -32,6 +33,7 @@ public class SimpleAuthenticator implements HttpAuthenticator {
 	 * Sets the user of this authentication mechanism.
 	 * @param user the user to set
 	 */
+	@Override
 	public void setUser(String user) {
 		this.user = user;
 	}
@@ -40,6 +42,7 @@ public class SimpleAuthenticator implements HttpAuthenticator {
 	 * Returns the user of this authentication mechanism.
 	 * @return the user
 	 */
+	@Override
 	public String getUser() {
 		return user;
 	}
@@ -48,6 +51,7 @@ public class SimpleAuthenticator implements HttpAuthenticator {
 	 * Sets the password of this authentication mechanism.
 	 * @param password the password to set
 	 */
+	@Override
 	public void setPassword(String password) {
 		this.password = password;
 	}
@@ -56,6 +60,7 @@ public class SimpleAuthenticator implements HttpAuthenticator {
 	 * Returns the password of this authentication mechanism.
 	 * @return the password
 	 */
+	@Override
 	public String getPassword() {
 		return password;
 	}
