@@ -34,6 +34,17 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 		} catch (ParseException pe) {
 			return null;
 		}
+		return parseGistFromJSONObject(gistJO);
+	}
+		
+	/**
+	 * Returns a Gist object parsed from the given JSONObject.
+	 * @param gistJO -
+	 * 			JSONObject to parse
+	 * @return gist -
+	 * 			Gist object
+	 */
+	private Gist parseGistFromJSONObject(JSONObject gistJO) {
 		Gist gist = new Gist(); //Primary gist object
 		Object temp = null; //Temporary object for testing primitives for null
 		
@@ -254,7 +265,17 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 		} catch (ParseException e) {
 			return null;
 		}
+		return parseGistCommentFromJSONObject(commentJO);
+	}
 		
+	/**
+	 * Parses a GistComment object from the given JSONObject.
+	 * @param commentJO -
+	 * 			JSONObject to parse
+	 * @return comment -
+	 * 			GistComment object
+	 */
+	private GistComment parseGistCommentFromJSONObject(JSONObject commentJO) {
 		String url = (String) commentJO.get("url");
 		String body = (String) commentJO.get("body");
 		String createdAt = (String) commentJO.get("created_at");
@@ -343,16 +364,52 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 		return user;
 	}
 
+	/**
+	 * Parses and deserializes a List of Gist objects from the provided JSON
+	 * text. If there is an error with parsing the JSON, null is returned.
+	 * @param json -
+	 * 			JSON text to parse
+	 * @return gists -
+	 * 			List of Gist objects
+	 */
 	@Override
 	public List<Gist> deserializeGistsFromJson(String json) {
-		// TODO Auto-generated method stub
-		return null;
+		JSONArray gistArray = null;
+		try {
+			gistArray = (JSONArray) parser.parse(json);
+		} catch (ParseException e) {
+			return null;
+		}
+		List<Gist> gists = new ArrayList<Gist>();
+		for (Object gist : gistArray) {
+			JSONObject gistJO = (JSONObject) gist;
+			gists.add(parseGistFromJSONObject(gistJO));
+		}
+		return gists;
 	}
 
+	/**
+	 * Parses and deserializes a List of GistComment objects from the provided 
+	 * JSON text. If there is an error with parsing the JSON, null is returned.
+	 * @param json -
+	 * 			JSON text to parse
+	 * @return comments -
+	 * 			List of GistComment objects
+	 */
 	@Override
 	public List<GistComment> deserializeCommentsFromJson(String json) {
-		// TODO Auto-generated method stub
-		return null;
+		JSONArray commentArray = null;
+		try {
+			commentArray = (JSONArray) parser.parse(json);
+		} catch (ParseException e) {
+			return null;
+		}
+		List<GistComment> comments = new ArrayList<GistComment>();
+		for (Object comment : commentArray) {
+			JSONObject commentJO = (JSONObject) comment;
+			comments.add(parseGistCommentFromJSONObject(commentJO));
+		}
+		return comments;
 	}
 
 
