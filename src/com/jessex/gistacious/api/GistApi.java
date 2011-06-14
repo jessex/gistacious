@@ -19,7 +19,8 @@ public interface GistApi extends AuthenticationApi {
 	
 	Gist createGist(Gist gist) throws IOException;
 	
-	Gist editGist(long id, Gist newGist) throws IOException;
+	Gist editGist(long id, Gist newGist, List<GistFile> oldFiles) 
+	throws IOException;
 	
 	Gist forkGist(long id) throws IOException;
 	

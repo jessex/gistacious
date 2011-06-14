@@ -140,16 +140,17 @@ public class FullGistApi implements GistApi, GistCommentApi, GistUserApi {
 	@Override
 	public Gist createGist(Gist gist) throws IOException {
 		String url = UrlBuilder.getURL(UrlBuilder.UrlType.MY_GISTS);
-		String json = serializer.serializeJsonFromGist(gist);
+		String json = serializer.serializeJsonFromGistCreate(gist);
 		String responseJson = executePostCall(url, json);
 		return deserializer.deserializeGistFromJson(responseJson);
 	}
 
 	@Override
-	public Gist editGist(long id, Gist newGist) throws IOException {
+	public Gist editGist(long id, Gist newGist, List<GistFile> oldFiles) 
+	throws IOException {
 		String url = UrlBuilder.getURL(UrlBuilder.UrlType.GIST, 
 				Long.toString(id));
-		String json = serializer.serializeJsonFromGist(newGist);
+		String json = serializer.serializeJsonFromGistEdit(newGist, oldFiles);
 		String responseJson = executePostCall(url, json);
 		return deserializer.deserializeGistFromJson(responseJson);
 	}
