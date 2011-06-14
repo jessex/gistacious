@@ -7,6 +7,9 @@ public class GistFile {
 	private long size;
 	private String filename;
 	
+	private boolean isRenamed;
+	private String oldName;
+	
 	public GistFile() { }
 	
 	public GistFile(String filename, String content, String rawUrl, long size) {
@@ -79,6 +82,39 @@ public class GistFile {
 	 */
 	public String getRawUrl() {
 		return rawUrl;
+	}
+
+	/**
+	 * Sets that this file is a renamed version of an old file in a Gist edit.
+	 * @param isRenamed the isRenamed to set
+	 */
+	public void setRenamed(boolean isRenamed) {
+		this.isRenamed = isRenamed;
+	}
+
+	/**
+	 * Returns whether this file is a renamed version of an old file in a Gist
+	 * edit.
+	 * @return the isRenamed
+	 */
+	public boolean isRenamed() {
+		return isRenamed;
+	}
+
+	/**
+	 * Sets the name of the file in a previous revision.
+	 * @param oldName the oldName to set
+	 */
+	public void setOldName(String oldName) {
+		this.oldName = oldName;
+	}
+
+	/**
+	 * Returns the name of the file in a previous revision.
+	 * @return the oldName
+	 */
+	public String getOldName() {
+		return oldName;
 	}
 	
 	
