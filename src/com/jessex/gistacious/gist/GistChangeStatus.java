@@ -1,11 +1,17 @@
 package com.jessex.gistacious.gist;
 
+/**
+ * The model for a gist change status, which is the change status of a gist
+ * commitment. This is essentially the quantifiable (numerical) diff data for
+ * a gist revision, such as the number of additions, the number of deletions and
+ * the total number of changes.
+ * 
+ * @author jessex
+ */
 public class GistChangeStatus {
 
 	private int additions;
-	
 	private int deletions;
-	
 	private int total;
 	
 	public GistChangeStatus() { }
@@ -18,7 +24,8 @@ public class GistChangeStatus {
 
 	/**
 	 * Sets the amount of additions for this change.
-	 * @param additions the additions to set
+	 * 
+	 * @param additions the amount of additions
 	 */
 	public void setAdditions(int additions) {
 		this.additions = additions;
@@ -26,7 +33,8 @@ public class GistChangeStatus {
 
 	/**
 	 * Returns the amount of additions for this change.
-	 * @return the additions
+	 * 
+	 * @return amount of additions
 	 */
 	public int getAdditions() {
 		return additions;
@@ -34,7 +42,8 @@ public class GistChangeStatus {
 
 	/**
 	 * Sets the amount of deletions for this change.
-	 * @param deletions the deletions to set
+	 * 
+	 * @param deletions the amount of deletions
 	 */
 	public void setDeletions(int deletions) {
 		this.deletions = deletions;
@@ -42,7 +51,8 @@ public class GistChangeStatus {
 
 	/**
 	 * Returns the amount of deletions for this change.
-	 * @return the deletions
+	 * 
+	 * @return amount of deletions
 	 */
 	public int getDeletions() {
 		return deletions;
@@ -50,7 +60,8 @@ public class GistChangeStatus {
 
 	/**
 	 * Sets the total amount of changes for this change.
-	 * @param total the total to set
+	 * 
+	 * @param total the total amount of changes
 	 */
 	public void setTotal(int total) {
 		this.total = total;
@@ -58,11 +69,10 @@ public class GistChangeStatus {
 
 	/**
 	 * Returns the total amount of changes for this change.
-	 * @return the total
+	 * 
+	 * @return total amount of changes
 	 */
 	public int getTotal() {
 		return total;
 	}
-	
-	
 }

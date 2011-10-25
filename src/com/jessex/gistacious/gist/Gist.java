@@ -2,6 +2,14 @@ package com.jessex.gistacious.gist;
 
 import java.util.List;
 
+/**
+ * The model for a gist. A full gist object not only contains gist metadata, but
+ * also gist content in the form of one to many gist files, any gists that were
+ * forked from this gist, the gist that this gist was forked from (if that is
+ * indeed the case), and a list of histories for this gist.
+ * 
+ * @author jessex
+ */
 public class Gist {
 
 	private List<GistFile> files;
@@ -33,7 +41,8 @@ public class Gist {
 
 	/**
 	 * Sets the list of forks from this gist.
-	 * @param forks the forks to set
+	 * 
+	 * @param forks the list of forked gists
 	 */
 	public void setForks(List<Gist> forks) {
 		this.forks = forks;
@@ -41,15 +50,18 @@ public class Gist {
 
 	/**
 	 * Returns the list of forks from this gist.
-	 * @return the forks
+	 * 
+	 * @return list of forked gists
 	 */
 	public List<Gist> getForks() {
 		return forks;
 	}
 
 	/**
-	 * Sets the commit history for this gist.
-	 * @param history the history to set
+	 * Sets the commit history for this gist. This includes each individual
+	 * history for this gist.
+	 * 
+	 * @param history the list of commit histories of this gist
 	 */
 	public void setHistories(List<GistHistory> histories) {
 		this.histories = histories;
@@ -57,23 +69,26 @@ public class Gist {
 
 	/**
 	 * Returns the commit history for this gist.
-	 * @return the history
+	 * 
+	 * @return list of commit histories of this gist
 	 */
 	public List<GistHistory> getHistories() {
 		return histories;
 	}
 
 	/**
-	 * Sets the gist forked from this gist.
-	 * @param forkOf the forkOf to set
+	 * Sets the gist that this gist is forked from.
+	 * 
+	 * @param forkOf the gist that this gist is forked from
 	 */
 	public void setForkOf(Gist forkOf) {
 		this.forkOf = forkOf;
 	}
 
 	/**
-	 * Returns the gist forked from this gist.
-	 * @return the forkOf
+	 * Returns the gist that this gist is forked.
+	 * 
+	 * @return gist that this gist is forked from
 	 */
 	public Gist getForkOf() {
 		return forkOf;
@@ -81,6 +96,7 @@ public class Gist {
 
 	/**
 	 * Sets the description of this gist.
+	 * 
 	 * @param description the description to set
 	 */
 	public void setDescription(String description) {
@@ -89,7 +105,8 @@ public class Gist {
 
 	/**
 	 * Returns the description of this gist.
-	 * @return the description
+	 * 
+	 * @return description of this gist
 	 */
 	public String getDescription() {
 		return description;
@@ -97,7 +114,8 @@ public class Gist {
 
 	/**
 	 * Sets the amount of comments for this gist.
-	 * @param comments the comments to set
+	 * 
+	 * @param comments the amount of comments to set
 	 */
 	public void setCommentCount(int comments) {
 		this.commentCount = comments;
@@ -105,7 +123,8 @@ public class Gist {
 
 	/**
 	 * Returns the amount of comments for this gist.
-	 * @return the comments
+	 * 
+	 * @return amount of comments
 	 */
 	public int getCommentCount() {
 		return commentCount;
@@ -113,6 +132,7 @@ public class Gist {
 
 	/**
 	 * Sets the id of this gist.
+	 * 
 	 * @param id the id to set
 	 */
 	public void setId(long id) {
@@ -121,7 +141,8 @@ public class Gist {
 
 	/**
 	 * Returns the id of this gist.
-	 * @return the id
+	 * 
+	 * @return id of this gist
 	 */
 	public long getId() {
 		return id;
@@ -129,6 +150,7 @@ public class Gist {
 
 	/**
 	 * Sets the user for this gist.
+	 * 
 	 * @param user the user to set
 	 */
 	public void setUser(GistUser user) {
@@ -137,23 +159,27 @@ public class Gist {
 
 	/**
 	 * Returns the user for this gist.
-	 * @return the user
+	 * 
+	 * @return user of this gist
 	 */
 	public GistUser getUser() {
 		return user;
 	}
 
 	/**
-	 * Sets the update time for this gist.
-	 * @param updatedAt the updatedAt to set
+	 * Sets the most recent update time for this gist.
+	 * 
+	 * @param updatedAt String representation of the most recent update time of
+	 * this gist
 	 */
 	public void setUpdatedAt(String updatedAt) {
 		this.updatedAt = updatedAt;
 	}
 
 	/**
-	 * Returns the update time for this gist.
-	 * @return the updatedAt
+	 * Returns the most recent update time for this gist.
+	 * 
+	 * @return String representation of the most recent update time of this gist
 	 */
 	public String getUpdatedAt() {
 		return updatedAt;
@@ -161,7 +187,8 @@ public class Gist {
 
 	/**
 	 * Sets the create time for this gist.
-	 * @param createdAt the createdAt to set
+	 * 
+	 * @param createdAt String representation of the creation time of this gist
 	 */
 	public void setCreatedAt(String createdAt) {
 		this.createdAt = createdAt;
@@ -169,7 +196,8 @@ public class Gist {
 
 	/**
 	 * Returns the create time for this gist.
-	 * @return the createdAt
+	 * 
+	 * @return String representation of the creation time of this gist
 	 */
 	public String getCreatedAt() {
 		return createdAt;
@@ -177,7 +205,8 @@ public class Gist {
 
 	/**
 	 * Sets whether or not this gist is public.
-	 * @param isPublic the isPublic to set
+	 * 
+	 * @param isPublic whether or not this gist is public
 	 */
 	public void setPublic(boolean isPublic) {
 		this.isPublic = isPublic;
@@ -185,7 +214,8 @@ public class Gist {
 
 	/**
 	 * Returns whether or not this gist is public.
-	 * @return the isPublic
+	 * 
+	 * @return whether or not this gist is public
 	 */
 	public boolean isPublic() {
 		return isPublic;
@@ -193,7 +223,8 @@ public class Gist {
 
 	/**
 	 * Sets the HTML URL for this gist.
-	 * @param htmlUrl the htmlUrl to set
+	 * 
+	 * @param htmlUrl the HTML url to set
 	 */
 	public void setHtmlUrl(String htmlUrl) {
 		this.htmlUrl = htmlUrl;
@@ -201,7 +232,8 @@ public class Gist {
 
 	/**
 	 * Returns the HTML URL for this gist.
-	 * @return the htmlUrl
+	 * 
+	 * @return HTML url of this gist
 	 */
 	public String getHtmlUrl() {
 		return htmlUrl;
@@ -209,7 +241,8 @@ public class Gist {
 
 	/**
 	 * Sets the push URL for this gist.
-	 * @param gitPushUrl the gitPushUrl to set
+	 * 
+	 * @param gitPushUrl the git push url to set
 	 */
 	public void setGitPushUrl(String gitPushUrl) {
 		this.gitPushUrl = gitPushUrl;
@@ -217,7 +250,8 @@ public class Gist {
 
 	/**
 	 * Returns the push URL for this gist.
-	 * @return the gitPushUrl
+	 * 
+	 * @return git push url of this gist
 	 */
 	public String getGitPushUrl() {
 		return gitPushUrl;
@@ -225,7 +259,8 @@ public class Gist {
 
 	/**
 	 * Sets the pull URL for this gist.
-	 * @param gitPullUrl the gitPullUrl to set
+	 * 
+	 * @param gitPullUrl the git pull url to set
 	 */
 	public void setGitPullUrl(String gitPullUrl) {
 		this.gitPullUrl = gitPullUrl;
@@ -233,7 +268,8 @@ public class Gist {
 
 	/**
 	 * Returns the pull URL for this gist.
-	 * @return the gitPullUrl
+	 * 
+	 * @return git pull url of this gist
 	 */
 	public String getGitPullUrl() {
 		return gitPullUrl;
@@ -241,6 +277,7 @@ public class Gist {
 
 	/**
 	 * Sets the URL for this gist.
+	 * 
 	 * @param url the url to set
 	 */
 	public void setUrl(String url) {
@@ -249,7 +286,8 @@ public class Gist {
 
 	/**
 	 * Returns the URL for this gist.
-	 * @return the url
+	 * 
+	 * @return url of this gist
 	 */
 	public String getUrl() {
 		return url;
@@ -257,7 +295,8 @@ public class Gist {
 
 	/**
 	 * Sets the list of files in this gist.
-	 * @param files the files to set
+	 * 
+	 * @param files the list of files in this gist
 	 */
 	public void setFiles(List<GistFile> files) {
 		this.files = files;
@@ -265,14 +304,10 @@ public class Gist {
 
 	/**
 	 * Returns the list of files in this gist.
-	 * @return the files
+	 * 
+	 * @return list of files in this gist
 	 */
 	public List<GistFile> getFiles() {
 		return files;
 	}
-	
-	
-	
-	
-	
 }

@@ -1,5 +1,11 @@
 package com.jessex.gistacious.gist;
 
+/**
+ * The model for a gist file, which is an actual text file of some sort that
+ * composes part or all of the content of a gist.
+ * 
+ * @author jessex
+ */
 public class GistFile {
 
 	private String rawUrl;	
@@ -19,9 +25,9 @@ public class GistFile {
 		this.size = size;
 	}
 
-
 	/**
 	 * Sets the contents of the file.
+	 * 
 	 * @param content the content to set
 	 */
 	public void setContent(String content) {
@@ -30,7 +36,8 @@ public class GistFile {
 
 	/**
 	 * Returns the contents of the file.
-	 * @return the content
+	 * 
+	 * @return file content
 	 */
 	public String getContent() {
 		return content;
@@ -38,6 +45,7 @@ public class GistFile {
 
 	/**
 	 * Sets the filename of the file.
+	 * 
 	 * @param filename the filename to set
 	 */
 	public void setFilename(String filename) {
@@ -46,14 +54,16 @@ public class GistFile {
 
 	/**
 	 * Returns the filename of the file.
-	 * @return the filename
+	 * 
+	 * @return file filename
 	 */
 	public String getFilename() {
 		return filename;
 	}
 
 	/**
-	 * Sets the size of the file.
+	 * Sets the size of the file in kilobytes.
+	 * 
 	 * @param size the size to set
 	 */
 	public void setSize(long size) {
@@ -61,8 +71,9 @@ public class GistFile {
 	}
 
 	/**
-	 * Returns the size of the file.
-	 * @return the size
+	 * Returns the size of the file in kilobytes.
+	 * 
+	 * @return file size
 	 */
 	public long getSize() {
 		return size;
@@ -70,7 +81,8 @@ public class GistFile {
 
 	/**
 	 * Sets the raw access URL of the file.
-	 * @param rawUrl the rawUrl to set
+	 * 
+	 * @param rawUrl String representation of the raw url of this file
 	 */
 	public void setRawUrl(String rawUrl) {
 		this.rawUrl = rawUrl;
@@ -78,24 +90,28 @@ public class GistFile {
 
 	/**
 	 * Returns the raw access URL of the file.
-	 * @return the rawUrl
+	 * 
+	 * @return String representation of the raw url
 	 */
 	public String getRawUrl() {
 		return rawUrl;
 	}
 
 	/**
-	 * Sets that this file is a renamed version of an old file in a Gist edit.
-	 * @param isRenamed the isRenamed to set
+	 * Sets whether or not this file is a renamed version of an old file in a 
+	 * Gist edit.
+	 * 
+	 * @param isRenamed whether or not this is a renamed version of an old file
 	 */
 	public void setRenamed(boolean isRenamed) {
 		this.isRenamed = isRenamed;
 	}
 
 	/**
-	 * Returns whether this file is a renamed version of an old file in a Gist
-	 * edit.
-	 * @return the isRenamed
+	 * Returns whether or notthis file is a renamed version of an old file in a 
+	 * Gist edit.
+	 * 
+	 * @return whether or not this file is a renamed version of an old file
 	 */
 	public boolean isRenamed() {
 		return isRenamed;
@@ -103,7 +119,8 @@ public class GistFile {
 
 	/**
 	 * Sets the name of the file in a previous revision.
-	 * @param oldName the oldName to set
+	 * 
+	 * @param oldName the name of an older version of this file
 	 */
 	public void setOldName(String oldName) {
 		this.oldName = oldName;
@@ -111,12 +128,10 @@ public class GistFile {
 
 	/**
 	 * Returns the name of the file in a previous revision.
-	 * @return the oldName
+	 * 
+	 * @return name of an older version of this file
 	 */
 	public String getOldName() {
 		return oldName;
-	}
-	
-	
-	
+	}	
 }

@@ -1,15 +1,18 @@
 package com.jessex.gistacious.gist;
 
+/**
+ * The model for a gist user, ie. some Github user who uses Github Gist.
+ * 
+ * @author jessex
+ */
 public class GistUser {
 
-	//Attributes from User objects found in Gist JSON
 	private String avatarUrl;
 	private String gravatarUrl;
 	private String url;
 	private String login;
 	private long id;
 	
-	//Additional attributes from User objects found in generic User JSON
 	private String name;
 	private String company;
 	private String blog;
@@ -25,11 +28,10 @@ public class GistUser {
 	private String createdAt;
 	private String type;
 	
-	//Additional attributes only for the currently authenticated user
 	private int privateGistCount;
 	private int privateRepoCount;
 	
-	private boolean isMe; //If this is the currently authenticated user
+	private boolean isMe;
 
 	public GistUser() { }
 	
@@ -44,7 +46,8 @@ public class GistUser {
 	
 	/**
 	 * Sets the avatar URL for this user.
-	 * @param avatarUrl the avatarUrl to set
+	 * 
+	 * @param avatarUrl the avatarUrl of this user
 	 */
 	public void setAvatarUrl(String avatarUrl) {
 		this.avatarUrl = avatarUrl;
@@ -52,7 +55,8 @@ public class GistUser {
 
 	/**
 	 * Returns the avatar URL for this user.
-	 * @return the avatarUrl
+	 * 
+	 * @return avatarUrl
 	 */
 	public String getAvatarUrl() {
 		return avatarUrl;
@@ -60,7 +64,8 @@ public class GistUser {
 
 	/**
 	 * Sets the gravatar URL for this user.
-	 * @param gravatarUrl the gravatarUrl to set
+	 * 
+	 * @param gravatarUrl the gravatar url of this user
 	 */
 	public void setGravatarUrl(String gravatarUrl) {
 		this.gravatarUrl = gravatarUrl;
@@ -68,7 +73,8 @@ public class GistUser {
 
 	/**
 	 * Returns the gravatar URL for this user.
-	 * @return the gravatarUrl
+	 * 
+	 * @return gravatar url of this user
 	 */
 	public String getGravatarUrl() {
 		return gravatarUrl;
@@ -76,7 +82,8 @@ public class GistUser {
 
 	/**
 	 * Sets the URL for this user.
-	 * @param url the url to set
+	 * 
+	 * @param url the url of this user
 	 */
 	public void setUrl(String url) {
 		this.url = url;
@@ -84,7 +91,8 @@ public class GistUser {
 
 	/**
 	 * Returns the URL for this user.
-	 * @return the url
+	 * 
+	 * @return url of this user
 	 */
 	public String getUrl() {
 		return url;
@@ -92,7 +100,8 @@ public class GistUser {
 
 	/**
 	 * Sets the login for this user.
-	 * @param login the login to set
+	 * 
+	 * @param login the login of this user
 	 */
 	public void setLogin(String login) {
 		this.login = login;
@@ -100,7 +109,8 @@ public class GistUser {
 
 	/**
 	 * Returns the login for this user.
-	 * @return the login
+	 * 
+	 * @return login of this user
 	 */
 	public String getLogin() {
 		return login;
@@ -108,7 +118,8 @@ public class GistUser {
 
 	/**
 	 * Sets the id for this user.
-	 * @param id the id to set
+	 * 
+	 * @param id the id of this user
 	 */
 	public void setId(long id) {
 		this.id = id;
@@ -116,7 +127,8 @@ public class GistUser {
 
 	/**
 	 * Returns the id for this user.
-	 * @return the id
+	 * 
+	 * @return id of this user
 	 */
 	public long getId() {
 		return id;
@@ -124,7 +136,8 @@ public class GistUser {
 
 	/**
 	 * Sets the name of this user.
-	 * @param name the name to set
+	 * 
+	 * @param name the name of this user
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -132,7 +145,8 @@ public class GistUser {
 
 	/**
 	 * Returns the name of this user.
-	 * @return the name
+	 * 
+	 * @return name of this user
 	 */
 	public String getName() {
 		return name;
@@ -140,7 +154,8 @@ public class GistUser {
 
 	/**
 	 * Sets the company of this user.
-	 * @param company the company to set
+	 * 
+	 * @param company the company of this user
 	 */
 	public void setCompany(String company) {
 		this.company = company;
@@ -148,7 +163,8 @@ public class GistUser {
 
 	/**
 	 * Returns the company of this user.
-	 * @return the company
+	 * 
+	 * @return company of this user
 	 */
 	public String getCompany() {
 		return company;
@@ -156,7 +172,8 @@ public class GistUser {
 
 	/**
 	 * Sets the blog URL of this user.
-	 * @param blog the blog to set
+	 * 
+	 * @param blog the blog of this user
 	 */
 	public void setBlog(String blog) {
 		this.blog = blog;
@@ -164,7 +181,8 @@ public class GistUser {
 
 	/**
 	 * Returns the blog URL of this user.
-	 * @return the blog
+	 * 
+	 * @return url of the blog of this user
 	 */
 	public String getBlog() {
 		return blog;
@@ -172,7 +190,8 @@ public class GistUser {
 
 	/**
 	 * Sets the email address of this user.
-	 * @param email the email to set
+	 * 
+	 * @param email the email of this user
 	 */
 	public void setEmail(String email) {
 		this.email = email;
@@ -180,7 +199,8 @@ public class GistUser {
 
 	/**
 	 * Returns the email address of this user.
-	 * @return the email
+	 * 
+	 * @return email address of this user
 	 */
 	public String getEmail() {
 		return email;
@@ -188,7 +208,8 @@ public class GistUser {
 
 	/**
 	 * Sets the location of this user.
-	 * @param location the location to set
+	 * 
+	 * @param location the location of this user
 	 */
 	public void setLocation(String location) {
 		this.location = location;
@@ -196,7 +217,8 @@ public class GistUser {
 
 	/**
 	 * Returns the location of this user.
-	 * @return the location
+	 * 
+	 * @return location of this user
 	 */
 	public String getLocation() {
 		return location;
@@ -204,7 +226,8 @@ public class GistUser {
 
 	/**
 	 * Sets the bio of this user.
-	 * @param bio the bio to set
+	 * 
+	 * @param bio the bio of this user
 	 */
 	public void setBio(String bio) {
 		this.bio = bio;
@@ -212,7 +235,8 @@ public class GistUser {
 
 	/**
 	 * Returns the bio of this user.
-	 * @return the bio
+	 * 
+	 * @return biographical text of this user
 	 */
 	public String getBio() {
 		return bio;
@@ -220,7 +244,8 @@ public class GistUser {
 
 	/**
 	 * Sets the hireability of this user.
-	 * @param hireable the hireable to set
+	 * 
+	 * @param hireable whether this user is hireable
 	 */
 	public void setHireable(boolean hireable) {
 		this.hireable = hireable;
@@ -228,7 +253,8 @@ public class GistUser {
 
 	/**
 	 * Returns the hireability of this user.
-	 * @return the hireable
+	 * 
+	 * @return whether this user is hireable
 	 */
 	public boolean isHireable() {
 		return hireable;
@@ -236,7 +262,8 @@ public class GistUser {
 
 	/**
 	 * Sets the amount of public repositories for this user.
-	 * @param publicRepos the publicRepos to set
+	 * 
+	 * @param publicRepos the amount of public repositories of this user
 	 */
 	public void setPublicRepoCount(int publicRepos) {
 		this.publicRepoCount = publicRepos;
@@ -244,7 +271,8 @@ public class GistUser {
 
 	/**
 	 * Returns the amount of public repositories for this user.
-	 * @return the publicRepos
+	 * 
+	 * @return amount of public repositories
 	 */
 	public int getPublicRepoCount() {
 		return publicRepoCount;
@@ -252,7 +280,8 @@ public class GistUser {
 
 	/**
 	 * Sets the amount of public gists for this user.
-	 * @param publicGists the publicGists to set
+	 * 
+	 * @param publicGists the amount of public gists of this user
 	 */
 	public void setPublicGistCount(int publicGists) {
 		this.publicGistCount = publicGists;
@@ -260,7 +289,8 @@ public class GistUser {
 
 	/**
 	 * Returns the amount of public gists for this user.
-	 * @return the publicGists
+	 * 
+	 * @return amount of public gists
 	 */
 	public int getPublicGistCount() {
 		return publicGistCount;
@@ -268,7 +298,8 @@ public class GistUser {
 
 	/**
 	 * Sets the amount of users following this user.
-	 * @param followers the followers to set
+	 * 
+	 * @param followers the amount of users following this user
 	 */
 	public void setFollowerCount(int followers) {
 		this.followerCount = followers;
@@ -276,7 +307,8 @@ public class GistUser {
 
 	/**
 	 * Returns the amount of users following this user.
-	 * @return the followers
+	 * 
+	 * @return amount of users following this user
 	 */
 	public int getFollowerCount() {
 		return followerCount;
@@ -284,7 +316,8 @@ public class GistUser {
 
 	/**
 	 * Sets the amount of users that this user is following.
-	 * @param following the following to set
+	 * 
+	 * @param following the amount of users this user is following
 	 */
 	public void setFollowingCount(int following) {
 		this.followingCount = following;
@@ -292,7 +325,8 @@ public class GistUser {
 
 	/**
 	 * Returns the amount of users that this user is following.
-	 * @return the following
+	 * 
+	 * @return amount of users this user is following
 	 */
 	public int getFollowingCount() {
 		return followingCount;
@@ -300,7 +334,8 @@ public class GistUser {
 
 	/**
 	 * Sets the URL of this user's Github profile.
-	 * @param htmlUrl the htmlUrl to set
+	 * 
+	 * @param htmlUrl the HTML url of this user's Github profile
 	 */
 	public void setHtmlUrl(String htmlUrl) {
 		this.htmlUrl = htmlUrl;
@@ -308,7 +343,8 @@ public class GistUser {
 
 	/**
 	 * Returns the URL of this user's Github profile.
-	 * @return the htmlUrl
+	 * 
+	 * @return HTML url
 	 */
 	public String getHtmlUrl() {
 		return htmlUrl;
@@ -316,7 +352,8 @@ public class GistUser {
 
 	/**
 	 * Sets the creation time of this user.
-	 * @param createdAt the createdAt to set
+	 * 
+	 * @param createdAt String representation of creation time of this user
 	 */
 	public void setCreatedAt(String createdAt) {
 		this.createdAt = createdAt;
@@ -324,7 +361,8 @@ public class GistUser {
 
 	/**
 	 * Returns the creation time of this user.
-	 * @return the createdAt
+	 * 
+	 * @return String representation of creation time
 	 */
 	public String getCreatedAt() {
 		return createdAt;
@@ -332,7 +370,8 @@ public class GistUser {
 
 	/**
 	 * Sets the type of this user, ie. "User".
-	 * @param type the type to set
+	 * 
+	 * @param type the type of this user
 	 */
 	public void setType(String type) {
 		this.type = type;
@@ -340,7 +379,8 @@ public class GistUser {
 
 	/**
 	 * Returns the type of this user, ie. "User".
-	 * @return the type
+	 * 
+	 * @return type of user
 	 */
 	public String getType() {
 		return type;
@@ -348,7 +388,8 @@ public class GistUser {
 
 	/**
 	 * Sets the amount of private gists for this user.
-	 * @param privateGistCount the privateGistCount to set
+	 * 
+	 * @param privateGistCount the amount of private gists of this user
 	 */
 	public void setPrivateGistCount(int privateGistCount) {
 		this.privateGistCount = privateGistCount;
@@ -356,7 +397,8 @@ public class GistUser {
 
 	/**
 	 * Returns the amount of private gists for this user.
-	 * @return the privateGistCount
+	 * 
+	 * @return amount of private gists
 	 */
 	public int getPrivateGistCount() {
 		return privateGistCount;
@@ -364,7 +406,8 @@ public class GistUser {
 
 	/**
 	 * Sets the amount of private repositories for this user.
-	 * @param privateRepoCount the privateRepoCount to set
+	 * 
+	 * @param privateRepoCount the amount of private repositories of this user
 	 */
 	public void setPrivateRepoCount(int privateRepoCount) {
 		this.privateRepoCount = privateRepoCount;
@@ -372,7 +415,8 @@ public class GistUser {
 
 	/**
 	 * Returns the amount of private repositories for this user.
-	 * @return the privateRepoCount
+	 * 
+	 * @return amount of private repositories
 	 */
 	public int getPrivateRepoCount() {
 		return privateRepoCount;
@@ -380,7 +424,8 @@ public class GistUser {
 
 	/**
 	 * Sets whether or not this is the currently authenticated user.
-	 * @param isMe the isMe to set
+	 * 
+	 * @param isMe if this is the currently authenticated user
 	 */
 	public void setIsMe(boolean isMe) {
 		this.isMe = isMe;
@@ -388,10 +433,10 @@ public class GistUser {
 
 	/**
 	 * Returns whether or not this is the currently authenticated user.
-	 * @return the isMe
+	 * 
+	 * @return if this is the currently authenticated user
 	 */
 	public boolean isMe() {
 		return isMe;
 	}
-	
 }

@@ -1,5 +1,11 @@
 package com.jessex.gistacious.gist;
 
+/**
+ * The model for a gist comment, which is a comment made by some gist user on
+ * some gist object.
+ * 
+ * @author jessex
+ */
 public class GistComment {
 
 	private long id;
@@ -23,6 +29,7 @@ public class GistComment {
 	
 	/**
 	 * Sets the id of this comment.
+	 * 
 	 * @param id the id to set
 	 */
 	public void setId(long id) {
@@ -31,7 +38,8 @@ public class GistComment {
 	
 	/**
 	 * Returns the id of this comment.
-	 * @return the id
+	 * 
+	 * @return id of this comment
 	 */
 	public long getId() {
 		return id;
@@ -39,7 +47,8 @@ public class GistComment {
 	
 	/**
 	 * Sets the url of the gist containing this comment.
-	 * @param url the url to set
+	 * 
+	 * @param url the url of the gist with this comment
 	 */
 	public void setUrl(String url) {
 		this.url = url;
@@ -47,7 +56,8 @@ public class GistComment {
 	
 	/**
 	 * Returns the url of the gist containing this comment.
-	 * @return the url
+	 * 
+	 * @return url of the gist with this comment
 	 */
 	public String getUrl() {
 		return url;
@@ -55,6 +65,7 @@ public class GistComment {
 	
 	/**
 	 * Sets the body of this comment.
+	 * 
 	 * @param body the body to set
 	 */
 	public void setBody(String body) {
@@ -63,7 +74,8 @@ public class GistComment {
 	
 	/**
 	 * Returns the body of this comment.
-	 * @return the body
+	 * 
+	 * @return body of this comment
 	 */
 	public String getBody() {
 		return body;
@@ -71,7 +83,8 @@ public class GistComment {
 	
 	/**
 	 * Sets the create time for this comment.
-	 * @param createdAt the createdAt to set
+	 * 
+	 * @param createdAt String representation of the creation time
 	 */
 	public void setCreatedAt(String createdAt) {
 		this.createdAt = createdAt;
@@ -79,7 +92,8 @@ public class GistComment {
 	
 	/**
 	 * Returns the create time for this comment.
-	 * @return the createdAt
+	 * 
+	 * @return String representation of the creation time
 	 */
 	public String getCreatedAt() {
 		return createdAt;
@@ -87,7 +101,8 @@ public class GistComment {
 	
 	/**
 	 * Sets the user of this comment.
-	 * @param user the user to set
+	 * 
+	 * @param user the user who wrote this comment
 	 */
 	public void setUser(GistUser user) {
 		this.user = user;
@@ -95,7 +110,8 @@ public class GistComment {
 	
 	/**
 	 * Returns the user of this comment.
-	 * @return the user
+	 * 
+	 * @return the user who wrote this comment
 	 */
 	public GistUser getUser() {
 		return user;
@@ -103,7 +119,8 @@ public class GistComment {
 
 	/**
 	 * Sets the id for the gist containing this comment.
-	 * @param gistId the gistId to set
+	 * 
+	 * @param gistId the id of the gist with this comment
 	 */
 	public void setGistId(String gistId) {
 		this.gistId = gistId;
@@ -111,10 +128,10 @@ public class GistComment {
 
 	/**
 	 * Returns the id for the gist containing this comment.
-	 * @return the gistId
+	 * 
+	 * @return id of the gist with this comment
 	 */
 	public String getGistId() {
 		return gistId;
-	}
-	
+	}	
 }
