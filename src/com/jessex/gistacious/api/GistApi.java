@@ -122,6 +122,4 @@ public interface GistApi extends AuthenticationApi {
 	 * @throws IOException
 	 */
 	void unstarGist(long id) throws IOException;
-	
-	
 }
