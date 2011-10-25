@@ -49,13 +49,11 @@ public class JsonSimpleSerializer implements JsonSerializer {
 		
 		List<String> renamedNames = new ArrayList<String>();
 		
-		//Handle each file in Gist
 		for (GistFile file : gist.getFiles()) {
 			sb.append(serializeGistFileFromComparison(file, oldFiles));
 			if (file.isRenamed()) renamedNames.add(file.getOldName());
 		}
 		
-		//Check for deleted files
 		for (GistFile file : oldFiles) {
 			String filename = file.getFilename();
 			if (!gist.getFiles().contains(filename) &&
@@ -66,7 +64,8 @@ public class JsonSimpleSerializer implements JsonSerializer {
 			}
 		}
 		
-		sb.replace(sb.length()-2, sb.length()-1, ""); //Remove trailing comma
+		//Remove trailing comma
+		sb.replace(sb.length()-2, sb.length()-1, "");
 		
 		return sb.toString();
 	}
@@ -93,13 +92,16 @@ public class JsonSimpleSerializer implements JsonSerializer {
 			sb.append(file.getContent());
 			sb.append("\"\n\t\t},\n");
 			file.setRenamed(false);
+			
+			//Change in file name
 			return sb.toString();
 		}
 		
 		for (GistFile oldFile : oldFiles) {
 			if (oldFile.getFilename().equals(file.getFilename())) {
+			  //No change in file content, carried by default
 				if (oldFile.getContent().equals(file.getContent()))
-					return ""; //No change in file content, carried by default
+					return "";
 				else 
 					break;
 			}
@@ -110,7 +112,9 @@ public class JsonSimpleSerializer implements JsonSerializer {
 		sb.append("\t: {\n\t\t\t\"content\": \"");
 		sb.append(file.getContent());
 		sb.append("\"\n\t\t},\n");
-		return sb.toString(); //Change in file content or new file entirely
+		
+		//Change in file content or new file entirely
+		return sb.toString();
 	}
 	
 	/** {@inheritDoc} */

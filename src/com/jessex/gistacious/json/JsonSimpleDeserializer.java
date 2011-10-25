@@ -18,14 +18,14 @@ import com.jessex.gistacious.gist.*;
  */
 public class JsonSimpleDeserializer implements JsonDeserializer {
 	
-	private JSONParser parser = new JSONParser(); //Parser for all JSON text
-	//Cache for GistUser objects taken from JSON text
+	private JSONParser parser = new JSONParser();
+	
 	private JsonCache<String, GistUser> userCache = new JsonUserCache();
 	
 	/** {@inheritDoc} */
 	@Override
 	public Gist deserializeGistFromJson(String json) {
-		JSONObject gistJO = null; //Gist JSON object
+		JSONObject gistJO = null;
 		try {
 			gistJO = (JSONObject) parser.parse(json); 
 		} catch (ParseException pe) {
@@ -41,8 +41,8 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 	 * @return Gist object
 	 */
 	private Gist parseGistFromJSONObject(JSONObject gistJO) {
-		Gist gist = new Gist(); //Primary gist object
-		Object temp = null; //Temporary object for testing primitives for null
+		Gist gist = new Gist();
+		Object temp = null;
 		
 		//Parse base attributes of gist from JSON
 		gist.setDescription((String) gistJO.get("description"));
@@ -53,7 +53,6 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 		gist.setGitPushUrl((String) gistJO.get("git_push_url"));
 		gist.setGitPullUrl((String) gistJO.get("git_pull_url"));
 		
-		//Watch for nulls with primitive types
 		temp = gistJO.get("comments");
 		if (temp != null) gist.setCommentCount((Integer) temp);
 		else gist.setCommentCount(0);
@@ -119,7 +118,7 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 		
 		//Check if user in cache, if not parse entire thing, if so return it
 		GistUser gistUser = userCache.getValue(user);
-		if (gistUser == null) { //User not yet in cache, so build and add it
+		if (gistUser == null) {
 			long id = 0L;
 			Object temp = userJO.get("id");
 			if (temp != null) id = (Long) temp;
@@ -367,11 +366,13 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 		
 		if (temp != null) {
 			user.setPrivateRepoCount((Integer) temp);
-			user.setIsMe(true); //Got private info, must be authenticated user
+			//Got private info, must be authenticated user
+			user.setIsMe(true);
 		}
 		else {
 			user.setPrivateRepoCount(0);
-			user.setIsMe(false); //No private info, must not be authenticated 
+			//No private info, must not be authenticated
+			user.setIsMe(false); 
 		}
 		
 		return user;
