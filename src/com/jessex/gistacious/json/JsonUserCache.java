@@ -13,34 +13,20 @@ public class JsonUserCache implements JsonCache<String, GistUser>{
 		this.userCache = new HashMap<String, GistUser>();
 	}
 	
-	/**
-	 * Returns whether or not the GistUser with the given login is in the user
-	 * cache.
-	 * @param login -
-	 * 			login of GistUser
-	 * @return isInCache -
-	 * 			whether or not user with login is in cache
-	 */
+	/** {@inheritDoc} */
+	@Override
 	public boolean isInCache(String login) {
 		return userCache.containsKey(login);
 	}
 	
-	/**
-	 * Returns the GistUser in the user cache with the given login.
-	 * @param login -
-	 * 			login of GistUser
-	 * @return user -
-	 * 			GistUser with given login
-	 */
+	/** {@inheritDoc} */
+	@Override
 	public GistUser getValue(String login) {
 		return userCache.get(login);
 	}
 	
-	/**
-	 * Adds the given GistUser to the user cache.
-	 * @param user -
-	 * 			GistUser to add to cache
-	 */
+	/** {@inheritDoc} */
+	@Override
 	public void putValue(String login, GistUser user) {
 		userCache.put(user.getLogin(), user);
 	}

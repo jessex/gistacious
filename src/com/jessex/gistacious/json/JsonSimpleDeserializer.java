@@ -17,15 +17,7 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 	//Cache for GistUser objects taken from JSON text
 	private JsonCache<String, GistUser> userCache = new JsonUserCache();
 	
-	/**
-	 * Parses and deserializes a Gist object from the provided JSON text. This
-	 * Gist object does not contain all comments on said Gist, as obtaining a 
-	 * given Gist's comments requires a completely separate Github API call.
-	 * @param json -
-	 * 			JSON text to parse
-	 * @return gist -
-	 * 			Gist object with related attributes and objects
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public Gist deserializeGistFromJson(String json) {
 		JSONObject gistJO = null; //Gist JSON object
@@ -39,10 +31,9 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 		
 	/**
 	 * Returns a Gist object parsed from the given JSONObject.
-	 * @param gistJO -
-	 * 			JSONObject to parse
-	 * @return gist -
-	 * 			Gist object
+	 * 
+	 * @param gistJO JSONObject to parse
+	 * @return Gist object
 	 */
 	private Gist parseGistFromJSONObject(JSONObject gistJO) {
 		Gist gist = new Gist(); //Primary gist object
@@ -56,6 +47,7 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 		gist.setHtmlUrl((String) gistJO.get("html_url"));
 		gist.setGitPushUrl((String) gistJO.get("git_push_url"));
 		gist.setGitPullUrl((String) gistJO.get("git_pull_url"));
+		
 		//Watch for nulls with primitive types
 		temp = gistJO.get("comments");
 		if (temp != null) gist.setCommentCount((Integer) temp);
@@ -110,10 +102,9 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 	
 	/**
 	 * Parses and deserializes a GistUser object from the provided JSON text.
-	 * @param userJson -
-	 * 			JSON text to parse
-	 * @return gistUser -
-	 * 			GistUser corresponding to some Gist
+	 * 
+	 * @param userJson JSON text to parse
+	 * @return GistUser corresponding to some Gist
 	 * @throws ParseException (org.json.simple.parser.ParseException)
 	 */
 	private GistUser deserializeGistUserFromJson(String userJson) 
@@ -140,16 +131,15 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 	/**
 	 * Parses and deserializes a list of GistFile objects from the provided 
 	 * JSON text.
-	 * @param fileJson -
-	 * 			JSON text to parse
-	 * @return gistFiles -
-	 * 			list of GistFile objects corresponding to some Gist
+	 * 
+	 * @param fileJson JSON text to parse
+	 * @return list of GistFile objects corresponding to some Gist
 	 * @throws ParseException (org.json.simple.parser.ParseException)
 	 */
 	private List<GistFile> deserializeGistFilesFromJson(String fileJson) 
 	throws ParseException {
 		JSONObject obj = (JSONObject) parser.parse(fileJson);
-		Collection<?> files = obj.values(); //Isolate file value from filename key
+		Collection<?> files = obj.values(); 
 		List<GistFile> gistFiles = new ArrayList<GistFile>();
 		Object temp = null;
 		
@@ -170,10 +160,9 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 	/**
 	 * Parses and deserializes a list of GistHistory objects from the provided 
 	 * JSON text.
-	 * @param historyJson -
-	 * 			JSON text to parse
-	 * @return gistHistories -
-	 * 			list of GistHistory objects corresponding to some Gist
+	 * 
+	 * @param historyJson JSON text to parse
+	 * @return list of GistHistory objects corresponding to some Gist
 	 * @throws ParseException (org.json.simple.parser.ParseException)
 	 */
 	private List<GistHistory> deserializeGistHistoriesFromJson(String 
@@ -199,10 +188,9 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 	/**
 	 * Parses and deserializes a GistChangeStatus object corresponding to a 
 	 * GistHistory for some Gist from the provided JSON text.
-	 * @param csJson -
-	 * 			JSON text to parse
-	 * @return gistChangeStatus -
-	 * 			GistChangeStatus corresponding to some Gist's GistHistory
+	 * 
+	 * @param csJson JSON text to parse
+	 * @return GistChangeStatus corresponding to some Gist's GistHistory
 	 * @throws ParseException (org.json.simple.parser.ParseException)
 	 */
 	private GistChangeStatus deserializeGistChangeStatusFromJson(String csJson) 
@@ -250,13 +238,26 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 		return gistForks;
 	}
 	
-	/**
-	 * Parses and deserializes a GistComment object from the provided JSON text.
-	 * @param json -
-	 * 			JSON text to parse
-	 * @return gistComment -
-	 * 			GistComment corresponding to some Gist
-	 */
+	/** {@inheritDoc} */
+	@Override
+	public List<Gist> deserializeGistsFromJson(String json) {
+		JSONArray gistArray = null;
+		try {
+			gistArray = (JSONArray) parser.parse(json);
+		} catch (ParseException e) {
+			return null;
+		}
+		
+		List<Gist> gists = new ArrayList<Gist>();
+		for (Object gist : gistArray) {
+			JSONObject gistJO = (JSONObject) gist;
+			gists.add(parseGistFromJSONObject(gistJO));
+		}
+		
+		return gists;
+	}
+	
+	/** {@inheritDoc} */
 	@Override
 	public GistComment deserializeCommentFromJson(String json) {
 		JSONObject commentJO = null;
@@ -265,15 +266,15 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 		} catch (ParseException e) {
 			return null;
 		}
+		
 		return parseGistCommentFromJSONObject(commentJO);
 	}
 		
 	/**
 	 * Parses a GistComment object from the given JSONObject.
-	 * @param commentJO -
-	 * 			JSONObject to parse
-	 * @return comment -
-	 * 			GistComment object
+	 * 
+	 * @param JSONObject to parse
+	 * @return GistComment object
 	 */
 	private GistComment parseGistCommentFromJSONObject(JSONObject commentJO) {
 		String url = (String) commentJO.get("url");
@@ -291,19 +292,25 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 		
 		return new GistComment(id, url, body, createdAt, user);
 	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public List<GistComment> deserializeCommentsFromJson(String json) {
+		JSONArray commentArray = null;
+		try {
+			commentArray = (JSONArray) parser.parse(json);
+		} catch (ParseException e) {
+			return null;
+		}
+		List<GistComment> comments = new ArrayList<GistComment>();
+		for (Object comment : commentArray) {
+			JSONObject commentJO = (JSONObject) comment;
+			comments.add(parseGistCommentFromJSONObject(commentJO));
+		}
+		return comments;
+	}
 
-	/**
-	 * Parses and deserializes an expanded GistUser object from the provided 
-	 * JSON text. This user contains all fields contained in the "user" objects 
-	 * found in standard Gist JSON responses, in addition to more fields found 
-	 * in User JSON responses. If certain fields are present, namely 
-	 * "private_gists" and "total_private_repos", then this must be the 
-	 * currently authenticated user.
-	 * @param json -
-	 * 			JSON text to parse
-	 * @return gistUser -
-	 * 			GistUser corresponding to some Github user
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public GistUser deserializeUserFromJson(String json) {
 		JSONObject userJO = null;
@@ -352,6 +359,7 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 		if (temp != null) user.setPrivateGistCount((Integer) temp);
 		else user.setPrivateGistCount(0);
 		temp = userJO.get("total_private_repos");
+		
 		if (temp != null) {
 			user.setPrivateRepoCount((Integer) temp);
 			user.setIsMe(true); //Got private info, must be authenticated user
@@ -363,54 +371,4 @@ public class JsonSimpleDeserializer implements JsonDeserializer {
 		
 		return user;
 	}
-
-	/**
-	 * Parses and deserializes a List of Gist objects from the provided JSON
-	 * text. If there is an error with parsing the JSON, null is returned.
-	 * @param json -
-	 * 			JSON text to parse
-	 * @return gists -
-	 * 			List of Gist objects
-	 */
-	@Override
-	public List<Gist> deserializeGistsFromJson(String json) {
-		JSONArray gistArray = null;
-		try {
-			gistArray = (JSONArray) parser.parse(json);
-		} catch (ParseException e) {
-			return null;
-		}
-		List<Gist> gists = new ArrayList<Gist>();
-		for (Object gist : gistArray) {
-			JSONObject gistJO = (JSONObject) gist;
-			gists.add(parseGistFromJSONObject(gistJO));
-		}
-		return gists;
-	}
-
-	/**
-	 * Parses and deserializes a List of GistComment objects from the provided 
-	 * JSON text. If there is an error with parsing the JSON, null is returned.
-	 * @param json -
-	 * 			JSON text to parse
-	 * @return comments -
-	 * 			List of GistComment objects
-	 */
-	@Override
-	public List<GistComment> deserializeCommentsFromJson(String json) {
-		JSONArray commentArray = null;
-		try {
-			commentArray = (JSONArray) parser.parse(json);
-		} catch (ParseException e) {
-			return null;
-		}
-		List<GistComment> comments = new ArrayList<GistComment>();
-		for (Object comment : commentArray) {
-			JSONObject commentJO = (JSONObject) comment;
-			comments.add(parseGistCommentFromJSONObject(commentJO));
-		}
-		return comments;
-	}
-
-
 }
