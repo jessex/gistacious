@@ -1,5 +1,14 @@
 package com.jessex.gistacious.json;
 
+/**
+ * A cache of parsed Gist* objects to be used in JSON deserialization to save
+ * time in repeated calls to the Gist API.
+ *
+ * @param <K> key for the cache (typically a String)
+ * @param <V> value for the cache (such as Gist, GistComment, etc.)
+ * 
+ * @author jessex
+ */
 public interface JsonCache<K,V> {
 	
 	/**

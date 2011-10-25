@@ -4,6 +4,11 @@ import java.util.List;
 
 import com.jessex.gistacious.gist.*;
 
+/**
+ * Object for serializing Gist* objects as JSON text.
+ * 
+ * @author jessex
+ */
 public interface JsonSerializer {
 
 	/**

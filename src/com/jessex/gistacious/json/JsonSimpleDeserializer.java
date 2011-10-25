@@ -11,6 +11,11 @@ import org.json.simple.parser.ParseException;
 
 import com.jessex.gistacious.gist.*;
 
+/**
+ * Standard implementation of JsonDeserializer interface.
+ * 
+ * @author jessex
+ */
 public class JsonSimpleDeserializer implements JsonDeserializer {
 	
 	private JSONParser parser = new JSONParser(); //Parser for all JSON text

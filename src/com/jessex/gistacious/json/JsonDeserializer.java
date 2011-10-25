@@ -1,8 +1,14 @@
 package com.jessex.gistacious.json;
 
 import java.util.List;
+
 import com.jessex.gistacious.gist.*;
 
+/**
+ * Object for deserializing JSON-formatted text into Gist* objects.
+ * 
+ * @author jessex
+ */
 public interface JsonDeserializer {
 
 	/**

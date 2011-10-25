@@ -5,6 +5,11 @@ import java.util.Map;
 
 import com.jessex.gistacious.gist.GistUser;
 
+/**
+ * Implementation of JsonCache for GistUser objects.
+ * 
+ * @author jessex
+ */
 public class JsonUserCache implements JsonCache<String, GistUser>{
 
 	private Map<String, GistUser> userCache;
