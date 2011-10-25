@@ -36,9 +36,8 @@ public class JsonUserCache implements JsonCache<String, GistUser>{
 		userCache.put(user.getLogin(), user);
 	}
 	
-	/**
-	 * Resets the user cache by clearing all entries.
-	 */
+	/** {@inheritDoc} */
+    @Override
 	public void resetCache() {
 		this.userCache.clear();
 	}
