@@ -2,6 +2,7 @@ package com.jessex.gistacious.api;
 
 import java.io.IOException;
 
+import com.jessex.gistacious.api.http.AuthenticationCredentialsDTO;
 import com.jessex.gistacious.gist.GistUser;
 
 /**
@@ -10,7 +11,7 @@ import com.jessex.gistacious.gist.GistUser;
  * 
  * @author jessex
  */
-public interface GistUserApi extends AuthenticationApi {
+public interface GistUserApi {
 
     /**
      * Returns the gist user object for the user with the given user name.
@@ -24,8 +25,10 @@ public interface GistUserApi extends AuthenticationApi {
 	/**
 	 * Returns the currently authenticated gist user.
 	 * 
+	 * @param credentials the authentication credentials
 	 * @return currently authenticated gist user
 	 * @throws IOException
 	 */
-	GistUser getMyUser() throws IOException;
+	GistUser getMyUser(AuthenticationCredentialsDTO credentials) 
+	    throws IOException;
 }

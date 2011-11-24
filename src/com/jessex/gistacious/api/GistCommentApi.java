@@ -3,6 +3,7 @@ package com.jessex.gistacious.api;
 import java.io.IOException;
 import java.util.List;
 
+import com.jessex.gistacious.api.http.AuthenticationCredentialsDTO;
 import com.jessex.gistacious.gist.GistComment;
 
 /**
@@ -11,7 +12,7 @@ import com.jessex.gistacious.gist.GistComment;
  * 
  * @author jessex
  */
-public interface GistCommentApi extends AuthenticationApi {
+public interface GistCommentApi {
 
     /**
      * Returns the list of gist comments for the gist with the given id.
@@ -37,11 +38,12 @@ public interface GistCommentApi extends AuthenticationApi {
 	 * 
 	 * @param gistId the id of the gist to comment on
 	 * @param comment the gist comment to write to the gist
+	 * @param credentials the authentication credentials
 	 * @return gist comment written to the gist
 	 * @throws IOException
 	 */
-	GistComment createGistComment(long gistId, GistComment comment) 
-	throws IOException;
+	GistComment createGistComment(long gistId, GistComment comment,
+	    AuthenticationCredentialsDTO credentials) throws IOException;
 	
 	/**
 	 * Edits the gist comment with the given comment id by using the given
@@ -49,17 +51,20 @@ public interface GistCommentApi extends AuthenticationApi {
 	 * 
 	 * @param commentId the id of the gist comment to edit
 	 * @param newComment the gist comment to write over the edited comment
+	 * @param credentials the authentication credentials
 	 * @return edited gist comment
 	 * @throws IOException
 	 */
-	GistComment editGistComment(long commentId, GistComment newComment) 
-	throws IOException;
+	GistComment editGistComment(long commentId, GistComment newComment,
+	    AuthenticationCredentialsDTO credentials) throws IOException;
 	
 	/**
 	 * Deletes the gist comment with the given comment id.
 	 * 
 	 * @param id the id of the gist comment to delete
+	 * @param credentials the authentication credentials
 	 * @throws IOException
 	 */
-	void deleteGistComment(long id) throws IOException;
+	void deleteGistComment(long id, AuthenticationCredentialsDTO credentials) 
+	    throws IOException;
 }
