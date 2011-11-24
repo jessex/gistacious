@@ -6,7 +6,7 @@ import java.util.Map;
 import com.jessex.gistacious.gist.GistUser;
 
 /**
- * Implementation of JsonCache for GistUser objects.
+ * Implementation of {@link JsonCache} for GistUser objects.
  * 
  * @author jessex
  */

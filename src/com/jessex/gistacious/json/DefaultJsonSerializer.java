@@ -6,11 +6,11 @@ import java.util.List;
 import com.jessex.gistacious.gist.*;
 
 /**
- * Standard implementation of JsonSerializer interface.
+ * Default implementation of the {@link JsonSerializer} interface.
  * 
  * @author jessex
  */
-public class JsonSimpleSerializer implements JsonSerializer {
+public class DefaultJsonSerializer implements JsonSerializer {
 
 	/** {@inheritDoc} */
 	@Override
