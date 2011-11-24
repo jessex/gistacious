@@ -25,6 +25,7 @@ public class DefaultGistCommentApi implements GistCommentApi {
     private JsonSerializer serializer = new DefaultJsonSerializer();
     private JsonDeserializer deserializer = new DefaultJsonDeserializer();
     
+    /** {@inheritDoc} */
     @Override
     public List<GistComment> getGistComments(long gistId) throws IOException {
         String url = UrlBuilder.getURL(UrlType.GIST_COMMENTS, 
@@ -33,6 +34,7 @@ public class DefaultGistCommentApi implements GistCommentApi {
         return deserializer.deserializeCommentsFromJson(json);
     }
 
+    /** {@inheritDoc} */
     @Override
     public GistComment getGistComment(long commentId) throws IOException {
         String url = UrlBuilder.getURL(UrlType.SINGLE_COMMENT, 
@@ -41,6 +43,7 @@ public class DefaultGistCommentApi implements GistCommentApi {
         return deserializer.deserializeCommentFromJson(json);
     }
 
+    /** {@inheritDoc} */
     @Override
     public GistComment createGistComment(long gistId, GistComment comment,
         AuthenticationCredentialsDTO credentials) throws IOException {
@@ -52,6 +55,7 @@ public class DefaultGistCommentApi implements GistCommentApi {
         return deserializer.deserializeCommentFromJson(responseJson);
     }
 
+    /** {@inheritDoc} */
     @Override
     public GistComment editGistComment(long commentId, GistComment newComment,
         AuthenticationCredentialsDTO credentials) throws IOException {
@@ -63,6 +67,7 @@ public class DefaultGistCommentApi implements GistCommentApi {
         return deserializer.deserializeCommentFromJson(responseJson);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void deleteGistComment(long id, 
         AuthenticationCredentialsDTO credentials) throws IOException {
@@ -72,5 +77,4 @@ public class DefaultGistCommentApi implements GistCommentApi {
         HttpDelete delete = HttpRequester.buildDeleteRequest(url, credentials);
         HttpRequester.executeRequest(delete);
     }
-
 }

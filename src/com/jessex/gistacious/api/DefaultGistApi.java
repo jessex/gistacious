@@ -34,6 +34,7 @@ public class DefaultGistApi implements GistApi {
     private JsonDeserializer deserializer = new DefaultJsonDeserializer();
     private static HttpAuthenticator authenticator = new DefaultAuthenticator();
     
+    /** {@inheritDoc} */
     @Override
     public Gist getGist(long id) throws IOException {
         String url = UrlBuilder.getURL(UrlType.GIST, 
@@ -42,6 +43,7 @@ public class DefaultGistApi implements GistApi {
         return deserializer.deserializeGistFromJson(json);
     }
 
+    /** {@inheritDoc} */
     @Override
     public List<Gist> getUserGists(String user) throws IOException {
         String url = UrlBuilder.getURL(UrlType.USER_GISTS, user);
@@ -49,6 +51,7 @@ public class DefaultGistApi implements GistApi {
         return deserializer.deserializeGistsFromJson(json);
     }
 
+    /** {@inheritDoc} */
     @Override
     public List<Gist> getMyGists(AuthenticationCredentialsDTO credentials) 
         throws IOException {
@@ -58,6 +61,7 @@ public class DefaultGistApi implements GistApi {
         return deserializer.deserializeGistsFromJson(json);
     }
 
+    /** {@inheritDoc} */
     @Override
     public List<Gist> getMyStarredGists(AuthenticationCredentialsDTO credentials) 
         throws IOException {
@@ -67,6 +71,7 @@ public class DefaultGistApi implements GistApi {
         return deserializer.deserializeGistsFromJson(json);
     }
 
+    /** {@inheritDoc} */
     @Override
     public List<Gist> getPublicGists() throws IOException {
         String url = UrlBuilder.getURL(UrlType.PUBLIC_GISTS);
@@ -74,6 +79,7 @@ public class DefaultGistApi implements GistApi {
         return deserializer.deserializeGistsFromJson(json);
     }
 
+    /** {@inheritDoc} */
     @Override
     public Gist createGist(Gist gist, AuthenticationCredentialsDTO credentials) 
         throws IOException {
@@ -84,6 +90,7 @@ public class DefaultGistApi implements GistApi {
         return deserializer.deserializeGistFromJson(responseJson);
     }
 
+    /** {@inheritDoc} */
     @Override
     public Gist editGist(long id, Gist newGist, List<GistFile> oldFiles,
             AuthenticationCredentialsDTO credentials) throws IOException {
@@ -94,6 +101,7 @@ public class DefaultGistApi implements GistApi {
         return deserializer.deserializeGistFromJson(responseJson);
     }
 
+    /** {@inheritDoc} */
     @Override
     public Gist forkGist(long id, AuthenticationCredentialsDTO credentials) 
         throws IOException {
@@ -114,6 +122,7 @@ public class DefaultGistApi implements GistApi {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void deleteGist(long id, AuthenticationCredentialsDTO credentials) 
         throws IOException {
@@ -126,6 +135,7 @@ public class DefaultGistApi implements GistApi {
         if (response == null) throw new IOException();
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean isStarredGist(long id, 
         AuthenticationCredentialsDTO credentials) throws IOException {
@@ -141,6 +151,7 @@ public class DefaultGistApi implements GistApi {
             return false;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void starGist(long id, AuthenticationCredentialsDTO credentials) 
         throws IOException {
@@ -151,6 +162,7 @@ public class DefaultGistApi implements GistApi {
         HttpRequester.executeRequest(put);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void unstarGist(long id, AuthenticationCredentialsDTO credentials) 
         throws IOException {
@@ -160,5 +172,4 @@ public class DefaultGistApi implements GistApi {
         HttpDelete delete = HttpRequester.buildDeleteRequest(url, credentials);
         HttpRequester.executeRequest(delete);
     }
-    
 }

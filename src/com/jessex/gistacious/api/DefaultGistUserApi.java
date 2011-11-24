@@ -18,6 +18,7 @@ public class DefaultGistUserApi implements GistUserApi {
 
     private JsonDeserializer deserializer = new DefaultJsonDeserializer();
     
+    /** {@inheritDoc} */
     @Override
     public GistUser getUser(String user) throws IOException {
         String url = UrlBuilder.getURL(UrlType.USER, user);
@@ -25,6 +26,7 @@ public class DefaultGistUserApi implements GistUserApi {
         return deserializer.deserializeUserFromJson(json);
     }
 
+    /** {@inheritDoc} */
     @Override
     public GistUser getMyUser(AuthenticationCredentialsDTO credentials) 
         throws IOException {
