@@ -1,13 +1,15 @@
 package com.jessex.gistacious.api;
 
-import java.io.IOException;
-
+import com.jessex.gistacious.api.http.AuthenticationCredentialsDTO;
+import com.jessex.gistacious.api.http.DefaultAuthenticator;
+import com.jessex.gistacious.api.http.HttpAuthenticator;
+import com.jessex.gistacious.api.http.HttpRequester;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.util.EntityUtils;
 
-import com.jessex.gistacious.api.http.*;
+import java.io.IOException;
 
 /**
  * Utilities for use by the various Gist APIs.
