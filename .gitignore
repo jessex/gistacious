@@ -1,10 +1,11 @@
-*.apk
 *.class
 *.cfg
 
 .project
 .classpath
 
-gen/
-bin/
 .settings/
+.idea/
+
+target/
+lib/
