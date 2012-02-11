@@ -3,17 +3,18 @@ package com.jessex.gistacious.api;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 
-import com.jessex.gistacious.api.http.AuthenticationCredentialsDTO;
-import com.jessex.gistacious.api.http.HttpRequester;
-import com.jessex.gistacious.api.url.UrlBuilder;
-import com.jessex.gistacious.api.url.UrlType;
+import com.jessex.gistacious.api.auth.AuthenticationCredentialsDTO;
 import com.jessex.gistacious.gist.GistComment;
-import com.jessex.gistacious.json.DefaultJsonDeserializer;
-import com.jessex.gistacious.json.DefaultJsonSerializer;
-import com.jessex.gistacious.json.JsonDeserializer;
-import com.jessex.gistacious.json.JsonSerializer;
+
+import static com.jessex.gistacious.api.HttpRequester.executeRequest;
+import static com.jessex.gistacious.api.HttpResponseHandler.*;
+import static com.jessex.gistacious.api.RequestBuilder.buildGetRequest;
+import static com.jessex.gistacious.api.RequestBuilder.buildPostRequest;
 
 /**
  * Default implementation of the {@link GistCommentApi} interface.
@@ -21,60 +22,66 @@ import com.jessex.gistacious.json.JsonSerializer;
  * @author jessex
  */
 public class DefaultGistCommentApi implements GistCommentApi {
-    
-    private JsonSerializer serializer = new DefaultJsonSerializer();
-    private JsonDeserializer deserializer = new DefaultJsonDeserializer();
-    
+
+    // TODO: Get rid of duplication in method calls with some sort of abstraction layer
+
+    private static final String COMMENT_JSON = "{ \"body\" : \"%s\" } ";
+
     /** {@inheritDoc} */
     @Override
-    public List<GistComment> getGistComments(long gistId) throws IOException {
-        String url = UrlBuilder.getURL(UrlType.GIST_COMMENTS, 
-                Long.toString(gistId));
-        String json = ApiUtils.executeGetCall(url, false, null);
-        return deserializer.deserializeCommentsFromJson(json);
+    public List<GistComment> getGistComments(long gistId) throws IOException, GistApiException {
+        String url = UrlBuilder.getURL(UrlType.GET_GIST_COMMENTS, Long.toString(gistId));
+        HttpGet httpGet = buildGetRequest(url);
+        HttpResponse httpResponse = executeRequest(httpGet);
+        return parseResponseForComments(httpResponse);
     }
 
     /** {@inheritDoc} */
     @Override
-    public GistComment getGistComment(long commentId) throws IOException {
-        String url = UrlBuilder.getURL(UrlType.SINGLE_COMMENT, 
-                Long.toString(commentId));
-        String json = ApiUtils.executeGetCall(url, false, null);
-        return deserializer.deserializeCommentFromJson(json);
+    public GistComment getGistComment(long commentId) throws IOException, GistApiException {
+        String url = UrlBuilder.getURL(UrlType.GET_COMMENT, Long.toString(commentId));
+        HttpGet httpGet = buildGetRequest(url);
+        HttpResponse httpResponse = executeRequest(httpGet);
+        return parseResponseForComment(httpResponse);
     }
 
     /** {@inheritDoc} */
     @Override
-    public GistComment createGistComment(long gistId, GistComment comment,
-        AuthenticationCredentialsDTO credentials) throws IOException {
-        
-        String url = UrlBuilder.getURL(UrlType.GIST_COMMENTS, 
-                Long.toString(gistId));
-        String json = serializer.serializeJsonFromGistComment(comment);
-        String responseJson = ApiUtils.executePostCall(url, json, credentials);
-        return deserializer.deserializeCommentFromJson(responseJson);
+    public GistComment createGistComment(long gistId, String comment, AuthenticationCredentialsDTO credentials)
+            throws IOException, GistApiException {
+        Validator.paramNotEmpty(comment, "comment cannot be empty or null");
+        Validator.paramNotNull(credentials, "credentials");
+
+        String url = UrlBuilder.getURL(UrlType.POST_COMMENT, Long.toString(gistId));
+        String json = String.format(COMMENT_JSON, comment);
+        HttpPost httpPost = buildPostRequest(url, json, credentials);
+        HttpResponse httpResponse = executeRequest(httpPost);
+        return parseResponseForComment(httpResponse);
     }
 
     /** {@inheritDoc} */
     @Override
-    public GistComment editGistComment(long commentId, GistComment newComment,
-        AuthenticationCredentialsDTO credentials) throws IOException {
-        
-        String url = UrlBuilder.getURL(UrlType.SINGLE_COMMENT, 
-                Long.toString(commentId));
-        String json = serializer.serializeJsonFromGistComment(newComment);
-        String responseJson = ApiUtils.executePostCall(url, json, credentials);
-        return deserializer.deserializeCommentFromJson(responseJson);
+    public GistComment editGistComment(long commentId, String comment, AuthenticationCredentialsDTO credentials)
+            throws IOException, GistApiException {
+        Validator.paramNotEmpty(comment, "comment cannot be empty or null");
+        Validator.paramNotNull(credentials, "credentials");
+
+        String url = UrlBuilder.getURL(UrlType.EDIT_COMMENT, Long.toString(commentId));
+        String json = String.format(COMMENT_JSON, comment);
+        HttpPost httpPost = buildPostRequest(url, json, credentials);
+        HttpResponse httpResponse = executeRequest(httpPost);
+        return parseResponseForComment(httpResponse);
     }
 
     /** {@inheritDoc} */
     @Override
-    public void deleteGistComment(long id, 
-        AuthenticationCredentialsDTO credentials) throws IOException {
-        
-        String url = UrlBuilder.getURL(UrlType.SINGLE_COMMENT, 
-                Long.toString(id));
-        HttpDelete delete = HttpRequester.buildDeleteRequest(url, credentials);
-        HttpRequester.executeRequest(delete);
+    public void deleteGistComment(long commentId, AuthenticationCredentialsDTO credentials)
+            throws IOException, GistApiException {
+        Validator.paramNotNull(credentials, "credentials");
+
+        String url = UrlBuilder.getURL(UrlType.DELETE_COMMENT, Long.toString(commentId));
+        HttpDelete delete = RequestBuilder.buildDeleteRequest(url, credentials);
+        HttpResponse httpResponse = executeRequest(delete);
+        parseResponseForStatusCode(httpResponse);
     }
 }

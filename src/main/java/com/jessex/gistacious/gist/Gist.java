@@ -12,302 +12,302 @@ import java.util.List;
  */
 public class Gist {
 
-	private List<GistFile> files;
-	private List<Gist> forks;
-	private List<GistHistory> histories;
-	private Gist forkOf;
-	private GistUser user;
-	
-	private String description;
-	private int commentCount;
-	private long id;
-	private String updatedAt;
-	private String createdAt;
-	private boolean isPublic;
-	private String htmlUrl;
-	private String gitPushUrl;
-	private String gitPullUrl;
-	private String url;
-	
-	public Gist() { }
-	
-	//Condensed constructor for quickly building a fork gist
-	public Gist(Long id, String url, String createdAt, GistUser user) {
-		this.id = id;
-		this.url = url;
-		this.createdAt = createdAt;
-		this.user = user;
-	}
+    private List<GistFile> files;
+    private List<Gist> forks;
+    private List<GistHistory> histories;
+    private Gist forkOf;
+    private GistUser user;
 
-	/**
-	 * Sets the list of forks from this gist.
-	 * 
-	 * @param forks the list of forked gists
-	 */
-	public void setForks(List<Gist> forks) {
-		this.forks = forks;
-	}
+    private String description;
+    private int commentCount;
+    private long id;
+    private String updatedAt;
+    private String createdAt;
+    private boolean isPublic;
+    private String htmlUrl;
+    private String gitPushUrl;
+    private String gitPullUrl;
+    private String url;
 
-	/**
-	 * Returns the list of forks from this gist.
-	 * 
-	 * @return list of forked gists
-	 */
-	public List<Gist> getForks() {
-		return forks;
-	}
+    public Gist() { }
 
-	/**
-	 * Sets the commit history for this gist. This includes each individual
-	 * history for this gist.
-	 * 
-	 * @param history the list of commit histories of this gist
-	 */
-	public void setHistories(List<GistHistory> histories) {
-		this.histories = histories;
-	}
+    //Condensed constructor for quickly building a fork gist
+    public Gist(Long id, String url, String createdAt, GistUser user) {
+        this.id = id;
+        this.url = url;
+        this.createdAt = createdAt;
+        this.user = user;
+    }
 
-	/**
-	 * Returns the commit history for this gist.
-	 * 
-	 * @return list of commit histories of this gist
-	 */
-	public List<GistHistory> getHistories() {
-		return histories;
-	}
+    /**
+     * Sets the list of forks from this gist.
+     *
+     * @param forks the list of forked gists
+     */
+    public void setForks(List<Gist> forks) {
+        this.forks = forks;
+    }
 
-	/**
-	 * Sets the gist that this gist is forked from.
-	 * 
-	 * @param forkOf the gist that this gist is forked from
-	 */
-	public void setForkOf(Gist forkOf) {
-		this.forkOf = forkOf;
-	}
+    /**
+     * Returns the list of forks from this gist.
+     *
+     * @return list of forked gists
+     */
+    public List<Gist> getForks() {
+        return forks;
+    }
 
-	/**
-	 * Returns the gist that this gist is forked.
-	 * 
-	 * @return gist that this gist is forked from
-	 */
-	public Gist getForkOf() {
-		return forkOf;
-	}
+    /**
+     * Sets the commit history for this gist. This includes each individual
+     * history for this gist.
+     *
+     * @param history the list of commit histories of this gist
+     */
+    public void setHistories(List<GistHistory> histories) {
+        this.histories = histories;
+    }
 
-	/**
-	 * Sets the description of this gist.
-	 * 
-	 * @param description the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    /**
+     * Returns the commit history for this gist.
+     *
+     * @return list of commit histories of this gist
+     */
+    public List<GistHistory> getHistories() {
+        return histories;
+    }
 
-	/**
-	 * Returns the description of this gist.
-	 * 
-	 * @return description of this gist
-	 */
-	public String getDescription() {
-		return description;
-	}
+    /**
+     * Sets the gist that this gist is forked from.
+     *
+     * @param forkOf the gist that this gist is forked from
+     */
+    public void setForkOf(Gist forkOf) {
+        this.forkOf = forkOf;
+    }
 
-	/**
-	 * Sets the amount of comments for this gist.
-	 * 
-	 * @param comments the amount of comments to set
-	 */
-	public void setCommentCount(int comments) {
-		this.commentCount = comments;
-	}
+    /**
+     * Returns the gist that this gist is forked.
+     *
+     * @return gist that this gist is forked from
+     */
+    public Gist getForkOf() {
+        return forkOf;
+    }
 
-	/**
-	 * Returns the amount of comments for this gist.
-	 * 
-	 * @return amount of comments
-	 */
-	public int getCommentCount() {
-		return commentCount;
-	}
+    /**
+     * Sets the description of this gist.
+     *
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	/**
-	 * Sets the id of this gist.
-	 * 
-	 * @param id the id to set
-	 */
-	public void setId(long id) {
-		this.id = id;
-	}
+    /**
+     * Returns the description of this gist.
+     *
+     * @return description of this gist
+     */
+    public String getDescription() {
+        return description;
+    }
 
-	/**
-	 * Returns the id of this gist.
-	 * 
-	 * @return id of this gist
-	 */
-	public long getId() {
-		return id;
-	}
+    /**
+     * Sets the amount of comments for this gist.
+     *
+     * @param comments the amount of comments to set
+     */
+    public void setCommentCount(int comments) {
+        this.commentCount = comments;
+    }
 
-	/**
-	 * Sets the user for this gist.
-	 * 
-	 * @param user the user to set
-	 */
-	public void setUser(GistUser user) {
-		this.user = user;
-	}
+    /**
+     * Returns the amount of comments for this gist.
+     *
+     * @return amount of comments
+     */
+    public int getCommentCount() {
+        return commentCount;
+    }
 
-	/**
-	 * Returns the user for this gist.
-	 * 
-	 * @return user of this gist
-	 */
-	public GistUser getUser() {
-		return user;
-	}
+    /**
+     * Sets the id of this gist.
+     *
+     * @param id the id to set
+     */
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	/**
-	 * Sets the most recent update time for this gist.
-	 * 
-	 * @param updatedAt String representation of the most recent update time of
-	 * this gist
-	 */
-	public void setUpdatedAt(String updatedAt) {
-		this.updatedAt = updatedAt;
-	}
+    /**
+     * Returns the id of this gist.
+     *
+     * @return id of this gist
+     */
+    public long getId() {
+        return id;
+    }
 
-	/**
-	 * Returns the most recent update time for this gist.
-	 * 
-	 * @return String representation of the most recent update time of this gist
-	 */
-	public String getUpdatedAt() {
-		return updatedAt;
-	}
+    /**
+     * Sets the user for this gist.
+     *
+     * @param user the user to set
+     */
+    public void setUser(GistUser user) {
+        this.user = user;
+    }
 
-	/**
-	 * Sets the create time for this gist.
-	 * 
-	 * @param createdAt String representation of the creation time of this gist
-	 */
-	public void setCreatedAt(String createdAt) {
-		this.createdAt = createdAt;
-	}
+    /**
+     * Returns the user for this gist.
+     *
+     * @return user of this gist
+     */
+    public GistUser getUser() {
+        return user;
+    }
 
-	/**
-	 * Returns the create time for this gist.
-	 * 
-	 * @return String representation of the creation time of this gist
-	 */
-	public String getCreatedAt() {
-		return createdAt;
-	}
+    /**
+     * Sets the most recent update time for this gist.
+     *
+     * @param updatedAt String representation of the most recent update time of
+     * this gist
+     */
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 
-	/**
-	 * Sets whether or not this gist is public.
-	 * 
-	 * @param isPublic whether or not this gist is public
-	 */
-	public void setPublic(boolean isPublic) {
-		this.isPublic = isPublic;
-	}
+    /**
+     * Returns the most recent update time for this gist.
+     *
+     * @return String representation of the most recent update time of this gist
+     */
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
 
-	/**
-	 * Returns whether or not this gist is public.
-	 * 
-	 * @return whether or not this gist is public
-	 */
-	public boolean isPublic() {
-		return isPublic;
-	}
+    /**
+     * Sets the create time for this gist.
+     *
+     * @param createdAt String representation of the creation time of this gist
+     */
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
 
-	/**
-	 * Sets the HTML URL for this gist.
-	 * 
-	 * @param htmlUrl the HTML url to set
-	 */
-	public void setHtmlUrl(String htmlUrl) {
-		this.htmlUrl = htmlUrl;
-	}
+    /**
+     * Returns the create time for this gist.
+     *
+     * @return String representation of the creation time of this gist
+     */
+    public String getCreatedAt() {
+        return createdAt;
+    }
 
-	/**
-	 * Returns the HTML URL for this gist.
-	 * 
-	 * @return HTML url of this gist
-	 */
-	public String getHtmlUrl() {
-		return htmlUrl;
-	}
+    /**
+     * Sets whether or not this gist is public.
+     *
+     * @param isPublic whether or not this gist is public
+     */
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
+    }
 
-	/**
-	 * Sets the push URL for this gist.
-	 * 
-	 * @param gitPushUrl the git push url to set
-	 */
-	public void setGitPushUrl(String gitPushUrl) {
-		this.gitPushUrl = gitPushUrl;
-	}
+    /**
+     * Returns whether or not this gist is public.
+     *
+     * @return whether or not this gist is public
+     */
+    public boolean isPublic() {
+        return isPublic;
+    }
 
-	/**
-	 * Returns the push URL for this gist.
-	 * 
-	 * @return git push url of this gist
-	 */
-	public String getGitPushUrl() {
-		return gitPushUrl;
-	}
+    /**
+     * Sets the HTML URL for this gist.
+     *
+     * @param htmlUrl the HTML url to set
+     */
+    public void setHtmlUrl(String htmlUrl) {
+        this.htmlUrl = htmlUrl;
+    }
 
-	/**
-	 * Sets the pull URL for this gist.
-	 * 
-	 * @param gitPullUrl the git pull url to set
-	 */
-	public void setGitPullUrl(String gitPullUrl) {
-		this.gitPullUrl = gitPullUrl;
-	}
+    /**
+     * Returns the HTML URL for this gist.
+     *
+     * @return HTML url of this gist
+     */
+    public String getHtmlUrl() {
+        return htmlUrl;
+    }
 
-	/**
-	 * Returns the pull URL for this gist.
-	 * 
-	 * @return git pull url of this gist
-	 */
-	public String getGitPullUrl() {
-		return gitPullUrl;
-	}
+    /**
+     * Sets the push URL for this gist.
+     *
+     * @param gitPushUrl the git push url to set
+     */
+    public void setGitPushUrl(String gitPushUrl) {
+        this.gitPushUrl = gitPushUrl;
+    }
 
-	/**
-	 * Sets the URL for this gist.
-	 * 
-	 * @param url the url to set
-	 */
-	public void setUrl(String url) {
-		this.url = url;
-	}
+    /**
+     * Returns the push URL for this gist.
+     *
+     * @return git push url of this gist
+     */
+    public String getGitPushUrl() {
+        return gitPushUrl;
+    }
 
-	/**
-	 * Returns the URL for this gist.
-	 * 
-	 * @return url of this gist
-	 */
-	public String getUrl() {
-		return url;
-	}
+    /**
+     * Sets the pull URL for this gist.
+     *
+     * @param gitPullUrl the git pull url to set
+     */
+    public void setGitPullUrl(String gitPullUrl) {
+        this.gitPullUrl = gitPullUrl;
+    }
 
-	/**
-	 * Sets the list of files in this gist.
-	 * 
-	 * @param files the list of files in this gist
-	 */
-	public void setFiles(List<GistFile> files) {
-		this.files = files;
-	}
+    /**
+     * Returns the pull URL for this gist.
+     *
+     * @return git pull url of this gist
+     */
+    public String getGitPullUrl() {
+        return gitPullUrl;
+    }
 
-	/**
-	 * Returns the list of files in this gist.
-	 * 
-	 * @return list of files in this gist
-	 */
-	public List<GistFile> getFiles() {
-		return files;
-	}
+    /**
+     * Sets the URL for this gist.
+     *
+     * @param url the url to set
+     */
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    /**
+     * Returns the URL for this gist.
+     *
+     * @return url of this gist
+     */
+    public String getUrl() {
+        return url;
+    }
+
+    /**
+     * Sets the list of files in this gist.
+     *
+     * @param files the list of files in this gist
+     */
+    public void setFiles(List<GistFile> files) {
+        this.files = files;
+    }
+
+    /**
+     * Returns the list of files in this gist.
+     *
+     * @return list of files in this gist
+     */
+    public List<GistFile> getFiles() {
+        return files;
+    }
 }

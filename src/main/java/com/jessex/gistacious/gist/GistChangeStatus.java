@@ -10,69 +10,69 @@ package com.jessex.gistacious.gist;
  */
 public class GistChangeStatus {
 
-	private int additions;
-	private int deletions;
-	private int total;
-	
-	public GistChangeStatus() { }
-	
-	public GistChangeStatus(int additions, int deletions, int total) {
-		this.additions = additions;
-		this.deletions = deletions;
-		this.total = total;
-	}
+    private int additions;
+    private int deletions;
+    private int total;
 
-	/**
-	 * Sets the amount of additions for this change.
-	 * 
-	 * @param additions the amount of additions
-	 */
-	public void setAdditions(int additions) {
-		this.additions = additions;
-	}
+    public GistChangeStatus() { }
 
-	/**
-	 * Returns the amount of additions for this change.
-	 * 
-	 * @return amount of additions
-	 */
-	public int getAdditions() {
-		return additions;
-	}
+    public GistChangeStatus(int additions, int deletions, int total) {
+        this.additions = additions;
+        this.deletions = deletions;
+        this.total = total;
+    }
 
-	/**
-	 * Sets the amount of deletions for this change.
-	 * 
-	 * @param deletions the amount of deletions
-	 */
-	public void setDeletions(int deletions) {
-		this.deletions = deletions;
-	}
+    /**
+     * Sets the amount of additions for this change.
+     *
+     * @param additions the amount of additions
+     */
+    public void setAdditions(int additions) {
+        this.additions = additions;
+    }
 
-	/**
-	 * Returns the amount of deletions for this change.
-	 * 
-	 * @return amount of deletions
-	 */
-	public int getDeletions() {
-		return deletions;
-	}
+    /**
+     * Returns the amount of additions for this change.
+     *
+     * @return amount of additions
+     */
+    public int getAdditions() {
+        return additions;
+    }
 
-	/**
-	 * Sets the total amount of changes for this change.
-	 * 
-	 * @param total the total amount of changes
-	 */
-	public void setTotal(int total) {
-		this.total = total;
-	}
+    /**
+     * Sets the amount of deletions for this change.
+     *
+     * @param deletions the amount of deletions
+     */
+    public void setDeletions(int deletions) {
+        this.deletions = deletions;
+    }
 
-	/**
-	 * Returns the total amount of changes for this change.
-	 * 
-	 * @return total amount of changes
-	 */
-	public int getTotal() {
-		return total;
-	}
+    /**
+     * Returns the amount of deletions for this change.
+     *
+     * @return amount of deletions
+     */
+    public int getDeletions() {
+        return deletions;
+    }
+
+    /**
+     * Sets the total amount of changes for this change.
+     *
+     * @param total the total amount of changes
+     */
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
+    /**
+     * Returns the total amount of changes for this change.
+     *
+     * @return total amount of changes
+     */
+    public int getTotal() {
+        return total;
+    }
 }

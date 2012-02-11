@@ -3,68 +3,74 @@ package com.jessex.gistacious.api;
 import java.io.IOException;
 import java.util.List;
 
-import com.jessex.gistacious.api.http.AuthenticationCredentialsDTO;
+import com.jessex.gistacious.api.auth.AuthenticationCredentialsDTO;
 import com.jessex.gistacious.gist.GistComment;
 
 /**
- * The interface for making calls pertaining to gist comments to the GitHub 
- * Gist API.
+ * The interface for making calls about Gist comments to the Github Gist API. This is in a separate interface from
+ * {@link GistApi GistApi} to reflect the fact that calls to retrieve Gist resources do not include comments on those
+ * Gists: they must be retrieved separately.
  * 
  * @author jessex
  */
 public interface GistCommentApi {
 
     /**
-     * Returns the list of gist comments for the gist with the given id.
-     * 
-     * @param gistId the id of some gist
-     * @return list of gist comments for some gist
-     * @throws IOException
+     * Returns the list of Gist comments for the Gist with the given id.
+     *
+     * @param gistId the id of some Gist
+     * @return a list of Gist comments
+     * @throws IOException if there is an issue connecting to the server
+     * @throws GistApiException if there is an error raised by the response from the server
      */
-	List<GistComment> getGistComments(long gistId) throws IOException;
-	
-	/**
-	 * Returns the gist comment with the given comment id.
-	 * 
-	 * @param commentId the id of some gist comment
-	 * @return gist comment with the given id
-	 * @throws IOException
-	 */
-	GistComment getGistComment(long commentId) throws IOException;
-	
-	/**
-	 * Writes and returns a gist comment from the given comment object for the
-	 * gist with the given id.
-	 * 
-	 * @param gistId the id of the gist to comment on
-	 * @param comment the gist comment to write to the gist
-	 * @param credentials the authentication credentials
-	 * @return gist comment written to the gist
-	 * @throws IOException
-	 */
-	GistComment createGistComment(long gistId, GistComment comment,
-	    AuthenticationCredentialsDTO credentials) throws IOException;
-	
-	/**
-	 * Edits the gist comment with the given comment id by using the given
-	 * comment object.
-	 * 
-	 * @param commentId the id of the gist comment to edit
-	 * @param newComment the gist comment to write over the edited comment
-	 * @param credentials the authentication credentials
-	 * @return edited gist comment
-	 * @throws IOException
-	 */
-	GistComment editGistComment(long commentId, GistComment newComment,
-	    AuthenticationCredentialsDTO credentials) throws IOException;
-	
-	/**
-	 * Deletes the gist comment with the given comment id.
-	 * 
-	 * @param id the id of the gist comment to delete
-	 * @param credentials the authentication credentials
-	 * @throws IOException
-	 */
-	void deleteGistComment(long id, AuthenticationCredentialsDTO credentials) 
-	    throws IOException;
+    List<GistComment> getGistComments(long gistId) throws IOException, GistApiException;
+
+    /**
+     * Returns the Gist comment with the given comment id.
+     *
+     * @param commentId the id of some Gist comment
+     * @return a Gist comment
+     * @throws IOException if there is an issue connecting to the server
+     * @throws GistApiException if there is an error raised by the response from the server
+     */
+    GistComment getGistComment(long commentId) throws IOException, GistApiException;
+
+    /**
+     * Creates a Gist comment with the given String as its body for the Gist with the given id and returns the new Gist
+     * comment.
+     *
+     * @param gistId the id of the Gist to comment on
+     * @param comment the Gist comment to write to the Gist
+     * @param credentials the authentication credentials
+     * @return the Gist comment written to the Gist
+     * @throws IOException if there is an issue connecting to the server
+     * @throws GistApiException if there is an error raised by the response from the server
+     */
+    GistComment createGistComment(long gistId, String comment, AuthenticationCredentialsDTO credentials)
+            throws IOException, GistApiException;
+
+    /**
+     * Edits the Gist comment with the given comment id by changing it the body of the comment into the given String and
+     * returns the edited Gist comment.
+     *
+     * @param commentId the id of the Gist comment to edit
+     * @param comment the content to write to the edited Gist comment
+     * @param credentials the authentication credentials
+     * @return the edited Gist comment
+     * @throws IOException if there is an issue connecting to the server
+     * @throws GistApiException if there is an error raised by the response from the server
+     */
+    GistComment editGistComment(long commentId, String comment, AuthenticationCredentialsDTO credentials)
+            throws IOException, GistApiException;
+
+    /**
+     * Deletes the Gist comment with the given comment id.
+     *
+     * @param commentId the id of the Gist comment to delete
+     * @param credentials the authentication credentials
+     * @throws IOException if there is an issue connecting to the server
+     * @throws GistApiException if there is an error raised by the response from the server
+     */
+    void deleteGistComment(long commentId, AuthenticationCredentialsDTO credentials)
+            throws IOException, GistApiException;
 }

@@ -8,20 +8,16 @@ import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
-import org.apache.http.util.EntityUtils;
 
-import com.jessex.gistacious.api.http.AuthenticationCredentialsDTO;
-import com.jessex.gistacious.api.http.DefaultAuthenticator;
-import com.jessex.gistacious.api.http.HttpAuthenticator;
-import com.jessex.gistacious.api.http.HttpRequester;
-import com.jessex.gistacious.api.url.UrlBuilder;
-import com.jessex.gistacious.api.url.UrlType;
+import com.jessex.gistacious.api.auth.AuthenticationCredentialsDTO;
+import com.jessex.gistacious.api.json.DefaultJsonSerializer;
+import com.jessex.gistacious.api.json.JsonSerializer;
 import com.jessex.gistacious.gist.Gist;
 import com.jessex.gistacious.gist.GistFile;
-import com.jessex.gistacious.json.DefaultJsonDeserializer;
-import com.jessex.gistacious.json.DefaultJsonSerializer;
-import com.jessex.gistacious.json.JsonDeserializer;
-import com.jessex.gistacious.json.JsonSerializer;
+
+import static com.jessex.gistacious.api.HttpRequester.executeRequest;
+import static com.jessex.gistacious.api.HttpResponseHandler.*;
+import static com.jessex.gistacious.api.RequestBuilder.*;
 
 /**
  * Default implementation of the {@link GistApi} interface.
@@ -30,146 +26,130 @@ import com.jessex.gistacious.json.JsonSerializer;
  */
 public class DefaultGistApi implements GistApi {
 
+    // TODO: Get rid of duplication in method calls with some sort of abstraction layer
+
     private JsonSerializer serializer = new DefaultJsonSerializer();
-    private JsonDeserializer deserializer = new DefaultJsonDeserializer();
-    private static HttpAuthenticator authenticator = new DefaultAuthenticator();
-    
+
     /** {@inheritDoc} */
     @Override
     public Gist getGist(long id) throws IOException {
-        String url = UrlBuilder.getURL(UrlType.GIST, 
-                Long.toString(id));
-        String json = ApiUtils.executeGetCall(url, false, null);
-        return deserializer.deserializeGistFromJson(json);
+        String url = UrlBuilder.getURL(UrlType.GET_GIST,  Long.toString(id));
+        HttpGet httpGet = buildGetRequest(url);
+        HttpResponse httpResponse = executeRequest(httpGet);
+        return parseResponseForGist(httpResponse);
     }
 
     /** {@inheritDoc} */
     @Override
-    public List<Gist> getUserGists(String user) throws IOException {
-        String url = UrlBuilder.getURL(UrlType.USER_GISTS, user);
-        String json = ApiUtils.executeGetCall(url, false, null);
-        return deserializer.deserializeGistsFromJson(json);
+    public List<Gist> getUserGists(String user) throws IOException, GistApiException {
+        String url = UrlBuilder.getURL(UrlType.GET_USER_GISTS, user);
+        HttpGet httpGet = buildGetRequest(url);
+        HttpResponse httpResponse = executeRequest(httpGet);
+        return parseResponseForGists(httpResponse);
     }
 
     /** {@inheritDoc} */
     @Override
-    public List<Gist> getMyGists(AuthenticationCredentialsDTO credentials) 
-        throws IOException {
-        
-        String url = UrlBuilder.getURL(UrlType.MY_GISTS);
-        String json = ApiUtils.executeGetCall(url, true, credentials);
-        return deserializer.deserializeGistsFromJson(json);
+    public List<Gist> getAuthenticatedUserGists(AuthenticationCredentialsDTO credentials)
+            throws IOException, GistApiException {
+
+        String url = UrlBuilder.getURL(UrlType.GET_AUTHENTICATED_USER_GISTS);
+        HttpGet httpGet = buildGetRequest(url, credentials);
+        HttpResponse httpResponse = executeRequest(httpGet);
+        return parseResponseForGists(httpResponse);
     }
 
     /** {@inheritDoc} */
     @Override
-    public List<Gist> getMyStarredGists(AuthenticationCredentialsDTO credentials) 
-        throws IOException {
-        
-        String url = UrlBuilder.getURL(UrlType.MY_STARRED_GISTS);
-        String json = ApiUtils.executeGetCall(url, true, credentials);
-        return deserializer.deserializeGistsFromJson(json);
+    public List<Gist> getAuthenticatedUserStarredGists(AuthenticationCredentialsDTO credentials)
+            throws IOException, GistApiException {
+
+        String url = UrlBuilder.getURL(UrlType.GET_AUTHENTICATED_USER_STARRED_GISTS);
+        HttpGet httpGet = buildGetRequest(url, credentials);
+        HttpResponse httpResponse = executeRequest(httpGet);
+        return parseResponseForGists(httpResponse);
     }
 
     /** {@inheritDoc} */
     @Override
-    public List<Gist> getPublicGists() throws IOException {
-        String url = UrlBuilder.getURL(UrlType.PUBLIC_GISTS);
-        String json = ApiUtils.executeGetCall(url, false, null);
-        return deserializer.deserializeGistsFromJson(json);
+    public List<Gist> getPublicGists() throws IOException, GistApiException {
+        String url = UrlBuilder.getURL(UrlType.GET_PUBLIC_GISTS);
+        HttpGet httpGet = buildGetRequest(url);
+        HttpResponse httpResponse = executeRequest(httpGet);
+        return parseResponseForGists(httpResponse);
     }
 
     /** {@inheritDoc} */
     @Override
-    public Gist createGist(Gist gist, AuthenticationCredentialsDTO credentials) 
-        throws IOException {
-        
-        String url = UrlBuilder.getURL(UrlType.MY_GISTS);
+    public Gist createGist(Gist gist, AuthenticationCredentialsDTO credentials) throws IOException, GistApiException {
+        String url = UrlBuilder.getURL(UrlType.CREATE_GIST);
         String json = serializer.serializeJsonFromGistCreate(gist);
-        String responseJson = ApiUtils.executePostCall(url, json, credentials);
-        return deserializer.deserializeGistFromJson(responseJson);
+        HttpPost httpPost = buildPostRequest(url, json, credentials);
+        HttpResponse httpResponse = executeRequest(httpPost);
+        return parseResponseForGist(httpResponse);
     }
 
     /** {@inheritDoc} */
     @Override
-    public Gist editGist(long id, Gist newGist, List<GistFile> oldFiles,
-            AuthenticationCredentialsDTO credentials) throws IOException {
-        
-        String url = UrlBuilder.getURL(UrlType.GIST, Long.toString(id));
+    public Gist editGist(long id, Gist newGist, List<GistFile> oldFiles, AuthenticationCredentialsDTO credentials)
+            throws IOException, GistApiException {
+
+        String url = UrlBuilder.getURL(UrlType.EDIT_GIST, Long.toString(id));
         String json = serializer.serializeJsonFromGistEdit(newGist, oldFiles);
-        String responseJson = ApiUtils.executePostCall(url, json, credentials);
-        return deserializer.deserializeGistFromJson(responseJson);
+        HttpPost httpPost = buildPostRequest(url, json, credentials);
+        HttpResponse httpResponse = executeRequest(httpPost);
+        return parseResponseForGist(httpResponse);
     }
 
     /** {@inheritDoc} */
     @Override
-    public Gist forkGist(long id, AuthenticationCredentialsDTO credentials) 
-        throws IOException {
-        
-        String url = UrlBuilder.getURL(UrlType.GIST_FORK, Long.toString(id));
-        HttpPost post = new HttpPost(url);
-        authenticator.authenticateRequest(post, credentials);
-        
-        HttpResponse response = HttpRequester.executeRequest(post);
-        if (response == null) throw new IOException();
-        else {
-            if (response.getStatusLine().getStatusCode() != 201) {
-                //TODO: Deal with status line issue
-            }
-            
-            String responseJson = EntityUtils.toString(response.getEntity());
-            return deserializer.deserializeGistFromJson(responseJson);
-        }
+    public Gist forkGist(long id, AuthenticationCredentialsDTO credentials) throws IOException, GistApiException {
+
+        String url = UrlBuilder.getURL(UrlType.FORK_GIST, Long.toString(id));
+        HttpPost httpPost = buildPostRequest(url, credentials);
+        HttpResponse httpResponse = executeRequest(httpPost);
+        return parseResponseForGist(httpResponse);
     }
 
     /** {@inheritDoc} */
     @Override
-    public void deleteGist(long id, AuthenticationCredentialsDTO credentials) 
-        throws IOException {
-        
-        String url = UrlBuilder.getURL(UrlType.GIST, Long.toString(id));
-        HttpDelete delete = HttpRequester.buildDeleteRequest(url, 
-                credentials);
-        HttpResponse response = HttpRequester.executeRequest(delete);
-        
-        if (response == null) throw new IOException();
+    public void deleteGist(long id, AuthenticationCredentialsDTO credentials) throws IOException, GistApiException {
+
+        String url = UrlBuilder.getURL(UrlType.DELETE_GIST, Long.toString(id));
+        HttpDelete httpDelete = buildDeleteRequest(url, credentials);
+        HttpResponse httpResponse = executeRequest(httpDelete);
+        parseResponseForStatusCode(httpResponse);
     }
 
     /** {@inheritDoc} */
     @Override
-    public boolean isStarredGist(long id, 
-        AuthenticationCredentialsDTO credentials) throws IOException {
-        
-        String url = UrlBuilder.getURL(UrlType.GIST_STAR, Long.toString(id));
-        HttpGet get = HttpRequester.buildGetRequest(url);
-        authenticator.authenticateRequest(get, credentials);
-        HttpResponse response = HttpRequester.executeRequest(get);
-        
-        if (response.getStatusLine().getStatusCode() == 204)
-            return true;
-        else 
-            return false;
+    public boolean isStarredGist(long id, AuthenticationCredentialsDTO credentials)
+            throws IOException, GistApiException {
+
+        String url = UrlBuilder.getURL(UrlType.IS_GIST_STARRED, Long.toString(id));
+        HttpGet httpGet = buildGetRequest(url, credentials);
+        HttpResponse httpResponse = executeRequest(httpGet);
+        return parseResponseForStatusCode(httpResponse) == 204;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void starGist(long id, AuthenticationCredentialsDTO credentials) 
-        throws IOException {
-        
-        String url = UrlBuilder.getURL(UrlType.GIST_STAR, 
+    public void starGist(long id, AuthenticationCredentialsDTO credentials) throws IOException, GistApiException {
+
+        String url = UrlBuilder.getURL(UrlType.STAR_GIST, Long.toString(id));
+        HttpPut httpPut = buildPutRequest(url, credentials);
+        HttpResponse httpResponse = executeRequest(httpPut);
+        parseResponseForStatusCode(httpResponse);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void unstarGist(long id, AuthenticationCredentialsDTO credentials) throws IOException, GistApiException {
+
+        String url = UrlBuilder.getURL(UrlType.UNSTAR_GIST,
                 Long.toString(id));
-        HttpPut put = HttpRequester.buildPutRequest(url, "", credentials);
-        HttpRequester.executeRequest(put);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public void unstarGist(long id, AuthenticationCredentialsDTO credentials) 
-        throws IOException {
-        
-        String url = UrlBuilder.getURL(UrlType.GIST_STAR, 
-                Long.toString(id));
-        HttpDelete delete = HttpRequester.buildDeleteRequest(url, credentials);
-        HttpRequester.executeRequest(delete);
+        HttpDelete httpDelete = buildDeleteRequest(url, credentials);
+        HttpResponse httpResponse = executeRequest(httpDelete);
+        parseResponseForStatusCode(httpResponse);
     }
 }
