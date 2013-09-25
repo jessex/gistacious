@@ -1,12 +1,18 @@
 *.class
-*.cfg
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
 *.iml
 
-.project
-.classpath
-
-.settings/
+target/
 .idea/
 
-target/
-lib/
+*.*~
+*~
+*.DS_STORE
+
+*.log
+*.log.*
